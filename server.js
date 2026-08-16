@@ -52,17 +52,35 @@ const ENGRO_KNOWLEDGE_SYSTEM_PROMPT = `
 - ہمیشہ مؤنث صیغے استعمال کریں ("میں بتاتی ہوں"، "رہنمائی کر سکتی ہوں")۔
 `;
 
-// Helper: Convert Numbers, Symbols & % into Crisp Spoken Phonetic Urdu Words ("فی صد") with Engro English pronunciation
+// MASTER PHONETIC PARSER: Eliminates robotic pronunciations across all Urdu terms & names
 function convertNumbersToUrduWords(text) {
   if (!text) return '';
   
   let clean = text
+    // Strip markdown formatting & emojis
     .replace(/[\*#_`~>]/g, '')
     .replace(/\[.*?\]\(.*?\)/g, '')
     .replace(/[\(\)\[\]\{\}]/g, '')
     .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
-    .replace(/کاشتکار/g, 'کسان')
+    
+    // 1. Tricky Names & Words (Phonetic Fixes for Zarkhez & Shukriya)
+    .replace(/زرخیز/g, 'زر خیز')        // Fixes "Zarkhez" robotic drag -> Smooth human "Zar-khez"
+    .replace(/شکریہ/g, 'شکریا')         // Fixes "Shukria" stiff ligature -> Natural human "Shukriya"
+    .replace(/السلام علیکم/g, 'السلام و علیکم') // Smooth melodic greeting flow
+    .replace(/وعلیکم السلام/g, 'وعلیکم و السلام') // Smooth melodic greeting flow
+    .replace(/کاشتکار/g, 'کسان')        // Simpler, colloquial friendly word
+    .replace(/زنک/g, 'زِنک')           // Crisp "Zinc" pronunciation
+    .replace(/بائیو ایکٹیو/g, 'Bioactive') // Crisp English for technical compound
+    
+    // 2. Brand Names & Acronyms (Crisp English letters for natural ElevenLabs pronunciation)
     .replace(/اینگرو/g, 'Engro')
+    .replace(/ڈی اے پی/gi, 'DAP')
+    .replace(/این پی کے/gi, 'NPK')
+    .replace(/ایس او پی/gi, 'SOP')
+    .replace(/ایم او پی/gi, 'MOP')
+    .replace(/ایف ایف سی/gi, 'FFC')
+    
+    // 3. Percentages & Units (Spaced "فی صد" eliminates robotic symbol reading)
     .replace(/100%/g, 'سو فی صد')
     .replace(/100٪/g, 'سو فی صد')
     .replace(/33%/g, 'تینتیس فی صد')
@@ -71,9 +89,13 @@ function convertNumbersToUrduWords(text) {
     .replace(/46٪/g, 'چھیاسٹھ فی صد')
     .replace(/15%/g, 'پندرہ فی صد')
     .replace(/15٪/g, 'پندرہ فی صد')
+    .replace(/42%/g, 'بیالیس فی صد')
+    .replace(/42٪/g, 'بیالیس فی صد')
     .replace(/%/g, ' فی صد')
     .replace(/٪/g, ' فی صد')
     .replace(/فیصد/g, 'فی صد')
+    
+    // 4. Fractions & Complex Numbers
     .replace(/0800-00332/g, 'صفر آٹھ سو صفر صفر تین تین دو')
     .replace(/1\.5/g, 'ڈیڑھ')
     .replace(/0\.5/g, 'آدھی')
@@ -82,6 +104,7 @@ function convertNumbersToUrduWords(text) {
     .replace(/No 1/gi, 'نمبر ایک')
     .replace(/#1/g, 'نمبر ایک');
 
+  // 5. Digits Map (Maps 0-9 to native spoken Urdu words)
   const digitsMap = {
     '0': 'صفر',
     '1': 'ایک',
