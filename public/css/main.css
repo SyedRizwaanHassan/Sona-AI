@@ -1,0 +1,710 @@
+/* ==========================================================================
+   Sona AI Agent - Fauji Fertilizer Company (FFC) Sona Brand System
+   Palette: FFC Sona DAP Royal Purple (#4C1D95), Violet (#6D28D9), Gold (#F59E0B)
+   ========================================================================== */
+
+:root {
+  /* FFC Sona DAP Royal Purple Hierarchy */
+  --ffc-purple-dark: #4C1D95;
+  --ffc-purple-main: #6D28D9;
+  --ffc-purple-medium: #7C3AED;
+  --ffc-purple-light: #F5F3FF;
+  --ffc-purple-hover: #EDE9FE;
+  --ffc-purple-border: #DDD6FE;
+  
+  --ffc-gold: #F59E0B;
+  --ffc-gold-hover: #D97706;
+  --ffc-gold-light: #FEF3C7;
+  
+  --bg-app: #FAFAFA;
+  --bg-card: #FFFFFF;
+  --bg-user-msg: #F1F5F9;
+  
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  
+  --border-light: #E2E8F0;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(76, 29, 149, 0.08);
+  --shadow-lg: 0 12px 35px rgba(0, 0, 0, 0.1);
+
+  /* Typography */
+  --font-urdu: 'Noto Nastaliq Urdu', 'Noto Sans Arabic', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Nastaliq Urdu Text Utility */
+.nastaliq {
+  font-family: var(--font-urdu);
+  line-height: 2.3 !important;
+  font-size: 1.15rem;
+  direction: rtl;
+  text-align: right;
+}
+
+.text-gold {
+  color: var(--ffc-gold);
+}
+
+.text-purple {
+  color: var(--ffc-purple-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Header Navbar (FFC Royal Purple Theme)
+   -------------------------------------------------------------------------- */
+.navbar {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ffc-official-logo {
+  display: flex;
+  align-items: center;
+}
+
+.ffc-logo-svg {
+  height: 42px;
+  width: auto;
+}
+
+.brand-divider {
+  height: 28px;
+  width: 1px;
+  background: var(--border-light);
+}
+
+.brand-text h1 {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--ffc-purple-dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-status-dot {
+  width: 8px;
+  height: 8px;
+  background: #10B981;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.company-name {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons & Controls (English UI)
+   -------------------------------------------------------------------------- */
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background: var(--ffc-purple-dark);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--ffc-purple-main);
+  box-shadow: 0 4px 12px rgba(76, 29, 149, 0.25);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border-light);
+  color: var(--text-secondary);
+}
+
+.btn-outline:hover {
+  background: var(--ffc-purple-light);
+  color: var(--ffc-purple-dark);
+  border-color: var(--ffc-purple-border);
+}
+
+.btn-success {
+  background: #10B981;
+  color: white;
+}
+
+.btn-danger-outline {
+  background: transparent;
+  border-color: #EF4444;
+  color: #EF4444;
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   Main Workspace Layout
+   -------------------------------------------------------------------------- */
+.app-layout {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 16px 130px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Quick Question Chips Banner */
+.prompts-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.prompts-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-behavior: smooth;
+}
+
+.prompts-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.prompts-scroll::-webkit-scrollbar-thumb {
+  background: var(--ffc-purple-border);
+  border-radius: 4px;
+}
+
+.prompt-chip {
+  background: var(--ffc-purple-light);
+  border: 1px solid var(--ffc-purple-border);
+  color: var(--ffc-purple-dark);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.86rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.prompt-chip:hover {
+  background: var(--ffc-purple-dark);
+  color: #FFFFFF;
+  border-color: var(--ffc-purple-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Chat Container & Message Bubbles
+   -------------------------------------------------------------------------- */
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chat-message {
+  display: flex;
+  gap: 12px;
+  max-width: 90%;
+}
+
+.chat-message.user-message {
+  align-self: flex-end;
+  flex-direction: row;
+}
+
+.chat-message.bot-message {
+  align-self: flex-start;
+  width: 100%;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+
+.bot-avatar {
+  background: var(--ffc-purple-dark);
+  color: var(--ffc-gold);
+  border: 1px solid var(--ffc-gold);
+}
+
+.user-avatar {
+  background: #334155;
+  color: #FFFFFF;
+}
+
+.message-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+.user-message .message-content {
+  background: var(--bg-user-msg);
+  border-color: #CBD5E1;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.sender-name {
+  font-weight: 700;
+  color: var(--ffc-purple-dark);
+}
+
+.user-message .sender-name {
+  color: var(--text-primary);
+}
+
+.message-body {
+  color: var(--text-primary);
+  word-wrap: break-word;
+}
+
+/* --------------------------------------------------------------------------
+   Sona Voice Player Card (Purple Theme)
+   -------------------------------------------------------------------------- */
+.sona-voice-card {
+  margin-top: 12px;
+  background: var(--ffc-purple-light);
+  border: 1px solid var(--ffc-purple-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sona-voice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.sona-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--ffc-purple-dark);
+}
+
+.sona-tag {
+  background: var(--ffc-gold);
+  color: var(--ffc-purple-dark);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.audio-player-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.play-audio-btn {
+  background: var(--ffc-purple-dark);
+  color: var(--ffc-gold);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+
+.play-audio-btn:hover {
+  transform: scale(1.08);
+}
+
+.audio-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #DDD6FE;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.audio-progress-fill {
+  height: 100%;
+  background: var(--ffc-purple-dark);
+  transition: width 0.1s linear;
+}
+
+.audio-time {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ffc-purple-dark);
+  font-family: var(--font-sans);
+}
+
+/* --------------------------------------------------------------------------
+   Recording Overlay & Canvas
+   -------------------------------------------------------------------------- */
+.recording-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recording-card {
+  background: var(--bg-card);
+  padding: 28px 36px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 400px;
+  width: 90%;
+  border: 2px solid var(--ffc-purple-border);
+}
+
+.recording-pulse {
+  width: 64px;
+  height: 64px;
+  background: #EF4444;
+  color: white;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  animation: pulse-ring 1.5s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+  70% { box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.recording-card h3 {
+  color: var(--ffc-purple-dark);
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+}
+
+.recording-hint {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+}
+
+.recording-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+#waveformCanvas {
+  background: #F1F5F9;
+  border-radius: var(--radius-md);
+}
+
+/* --------------------------------------------------------------------------
+   Floating Bottom Input Toolbar
+   -------------------------------------------------------------------------- */
+.input-toolbar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 900px;
+  width: calc(100% - 32px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-light);
+  border-radius: 28px;
+  padding: 8px 14px;
+  z-index: 90;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.toolbar-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mic-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  background: var(--ffc-purple-dark);
+  color: var(--ffc-gold);
+  border: 2px solid var(--ffc-gold);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.mic-btn:hover {
+  transform: scale(1.06);
+  background: var(--ffc-purple-main);
+}
+
+.chat-form {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-app);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+
+.input-wrapper {
+  flex: 1;
+}
+
+.input-wrapper textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: var(--font-urdu);
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: var(--ffc-purple-dark);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  transition: background 0.2s ease;
+}
+
+.send-btn:hover {
+  background: var(--ffc-purple-main);
+}
+
+/* --------------------------------------------------------------------------
+   Modals
+   -------------------------------------------------------------------------- */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 480px;
+  padding: 22px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 10px;
+}
+
+.modal-header h3 {
+  font-size: 1.1rem;
+  color: var(--ffc-purple-dark);
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+.close-modal-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ffc-purple-dark);
+  font-family: var(--font-sans);
+}
+
+.form-control {
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  font-size: 0.95rem;
+  outline: none;
+  font-family: var(--font-sans);
+}
+
+.calc-results-card {
+  background: var(--ffc-purple-light);
+  border: 1px solid var(--ffc-purple-border);
+  padding: 14px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+}
+
+.calc-results-card h4 {
+  color: var(--ffc-purple-dark);
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.dosage-list {
+  list-style: none;
+  margin-bottom: 10px;
+}
+
+.dosage-list li {
+  margin-bottom: 3px;
+  font-size: 0.98rem;
+}
+
+.dosage-schedule p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.hidden {
+  display: none !important;
+}

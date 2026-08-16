@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sona AI Agent - Fauji Fertilizer Company (FFC)</title>
+  <meta name="description" content="Sona AI Agent - Fauji Fertilizer Company (FFC) Official Urdu AI Agronomist & Voice Assistant">
+  
+  <!-- Google Fonts: Noto Nastaliq Urdu & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- Top Executive Header Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand-identity">
+        <!-- Official FFC Sona DAP Vector Logo -->
+        <div class="ffc-official-logo">
+          <svg class="ffc-logo-svg" viewBox="0 0 210 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 8 C34 14, 42 30, 42 48 C28 48, 14 38, 22 8 Z" fill="#4C1D95"/>
+            <path d="M14 18 C24 23, 29 36, 27 48 C18 46, 10 34, 14 18 Z" fill="#F59E0B"/>
+            <path d="M32 20 C39 25, 43 36, 41 48 C33 46, 25 34, 32 20 Z" fill="#6D28D9"/>
+            <text x="52" y="34" font-family="'Inter', sans-serif" font-weight="900" font-size="26" fill="#4C1D95" letter-spacing="1.5">FFC</text>
+            <text x="53" y="46" font-family="'Inter', sans-serif" font-weight="700" font-size="7.5" fill="#64748B" letter-spacing="0.5">FAUJI FERTILIZER COMPANY</text>
+          </svg>
+        </div>
+        <div class="brand-divider"></div>
+        <div class="brand-text">
+          <h1>Sona AI Agent <span class="brand-status-dot" title="Online"></span></h1>
+          <p class="company-name">FFC Senior Agronomist & Voice Guide</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="clearChatBtn" class="btn btn-outline" title="Clear Chat History">
+          <i class="fa-solid fa-trash-can text-purple"></i>
+          <span>Clear Chat</span>
+        </button>
+        <button id="calculatorBtn" class="btn btn-outline" title="Fertilizer Calculator">
+          <i class="fa-solid fa-calculator text-purple"></i>
+          <span>Fertilizer Calculator</span>
+        </button>
+        <button id="voiceSettingsBtn" class="btn btn-primary" title="Voice Settings">
+          <i class="fa-solid fa-sliders text-gold"></i>
+          <span>Voice Settings</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Workspace -->
+  <main class="app-layout">
+    
+    <!-- English Quick Question Chips Bar -->
+    <section class="prompts-container">
+      <div class="prompts-scroll" id="quickPrompts">
+        <button class="prompt-chip" data-prompt="گندم میں سونا یوریا اور سونا ڈی اے پی استعمال کرنے کا طریقہ اور وقت بتائیں۔">
+          🌾 Wheat Fertilizer Schedule
+        </button>
+        <button class="prompt-chip" data-prompt="سونا بوران ڈی اے پی عام ڈی اے پی سے بہتر کیوں ہے؟ اس کے کیا فائدے ہیں؟">
+          🧪 Sona Boron DAP Benefits
+        </button>
+        <button class="prompt-chip" data-prompt="دھان کی فصل میں پیلا پن دور کرنے کے لیے سونا زنک کیسے استعمال کریں؟">
+          🌾 Rice & Sona Zinc Application
+        </button>
+        <button class="prompt-chip" data-prompt="ایف ایف سی ایس او پی (SOP) اور ایم او پی (MOP) پوٹاش کھاد میں کیا فرق ہے؟">
+          🌱 SOP vs MOP Potash Guide
+        </button>
+        <button class="prompt-chip" data-prompt="ایف ایف سی کا فارمر ہیلپ لائن نمبر اور مٹی کے ٹیسٹ کا طریقہ کیا ہے؟">
+          📞 FFC Helpline 0800-00332
+        </button>
+      </div>
+    </section>
+
+    <!-- Main Chat Workspace -->
+    <section class="chat-container">
+      <div class="chat-feed" id="chatFeed">
+        
+        <!-- Welcome Message from Sona AI -->
+        <div class="chat-message bot-message">
+          <div class="avatar bot-avatar">
+            <i class="fa-solid fa-seedling"></i>
+          </div>
+          <div class="message-content">
+            <div class="message-header">
+              <span class="sender-name">Sona (Senior Female Agronomist - FFC)</span>
+              <span class="timestamp">Just now</span>
+            </div>
+            <div class="message-body nastaliq">
+              السلام علیکم کاشتکار بھائی! میں **سونا** ہوں، فوجی فرٹیلائزر کمپنی (FFC) کی صوتی و تحریری زرعی رہنماء۔ 🌾<br><br>
+              میں آپ کو FFC میں خوش آمدید کہتی ہوں۔ آپ اپنی فصل (گندم، کپاس، دھان، کماد، مکئی) یا FFC کی کھادوں (**سونا یوریا، سونا ڈی اے پی، بوران، ایس او پی، سونا زنک، سرسَب**) سے متعلق کوئی بھی سوال لکھ کر یا نیچے مائیک پر **بول کر** پوچھ سکتے ہیں۔
+            </div>
+            
+            <!-- Sona Audio Player Card -->
+            <div class="sona-voice-card">
+              <div class="sona-voice-header">
+                <div class="sona-badge">
+                  <i class="fa-solid fa-volume-high text-gold"></i>
+                  <span>Sona Voice Guide (Audio)</span>
+                </div>
+                <span class="sona-tag">FFC Official Audio</span>
+              </div>
+              <div class="audio-player-controls">
+                <button class="play-audio-btn" data-speech-text="السلام علیکم کاشتکار بھائی! میں سونا ہوں، فوجی فرٹیلائزر کمپنی کی صوتی و تحریری زرعی رہنماء۔ میں آپ کو خوش آمدید کہتی ہوں۔">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+                <div class="audio-progress-bar">
+                  <div class="audio-progress-fill" style="width: 0%;"></div>
+                </div>
+                <span class="audio-time">0:00</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Recording Overlay Modal -->
+    <div class="recording-overlay hidden" id="recordingOverlay">
+      <div class="recording-card">
+        <div class="recording-pulse">
+          <i class="fa-solid fa-microphone"></i>
+        </div>
+        <h3>Listening to your voice...</h3>
+        <p class="recording-hint">Please speak your question clearly in Urdu</p>
+        
+        <canvas id="waveformCanvas" width="280" height="50"></canvas>
+        
+        <div class="recording-actions">
+          <button id="cancelRecordBtn" class="btn btn-danger-outline">
+            <i class="fa-solid fa-xmark"></i> Cancel
+          </button>
+          <button id="stopRecordBtn" class="btn btn-success">
+            <i class="fa-solid fa-paper-plane"></i> Submit Question
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Bottom Input Toolbar -->
+    <footer class="input-toolbar">
+      <div class="toolbar-container">
+        
+        <!-- Microphone Button -->
+        <button id="micRecordBtn" class="mic-btn" title="Speak in Urdu">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+
+        <!-- Text Input Form -->
+        <form id="chatForm" class="chat-form">
+          <div class="input-wrapper">
+            <textarea id="userInput" placeholder="Type your question in Urdu or speak into mic... (e.g., Wheat fertilizer schedule)" rows="1"></textarea>
+          </div>
+
+          <button type="submit" id="sendBtn" class="send-btn" title="Send Question">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Modal 1: Fertilizer Dosage Calculator Modal -->
+  <div class="modal-backdrop hidden" id="calcModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-calculator text-purple"></i> FFC Fertilizer Dosage Calculator</h3>
+        <button class="close-modal-btn" id="closeCalcModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="cropSelect">Select Crop:</label>
+          <select id="cropSelect" class="form-control">
+            <option value="wheat">🌾 Wheat (گندم)</option>
+            <option value="rice">🌾 Rice / Paddy (دھان / چاول)</option>
+            <option value="cotton">🌿 Cotton (کپاس)</option>
+            <option value="sugarcane">🎋 Sugarcane (کماد / گنا)</option>
+            <option value="maize">🌽 Maize (مکئی)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="acreInput">Land Size (in Acres):</label>
+          <input type="number" id="acreInput" class="form-control" value="1" min="0.5" step="0.5">
+        </div>
+
+        <button id="runCalcBtn" class="btn btn-primary btn-block">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Calculate Recommendations
+        </button>
+
+        <div class="calc-results-card hidden" id="calcResults">
+          <h4>Recommended FFC Fertilizer Quantities (Per Acre):</h4>
+          <ul class="dosage-list">
+            <li><strong>Sona Urea (سونا یوریا):</strong> <span id="resUrea">-</span> Bags</li>
+            <li><strong>Sona DAP (سونا ڈی اے پی):</strong> <span id="resDap">-</span> Bags</li>
+            <li><strong>Sona Zinc (سونا زنک):</strong> <span id="resZinc">-</span> Bags</li>
+            <li><strong>FFC SOP (ایف ایف سی ایس او پی):</strong> <span id="resSop">-</span> Bags</li>
+          </ul>
+          <div class="dosage-schedule">
+            <strong>Application Schedule:</strong>
+            <p id="resSchedule">-</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Voice Settings -->
+  <div class="modal-backdrop hidden" id="voiceModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-sliders text-purple"></i> Sona Voice Settings</h3>
+        <button class="close-modal-btn" id="closeVoiceModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="voiceSelect">Select Voice Persona:</label>
+          <select id="voiceSelect" class="form-control">
+            <option value="cgSgspJ2msm6clMCkdW9">Jessica / Sona - Warm Female Voice (Recommended)</option>
+            <option value="EXAVITQu4vr4xnSDxMaL">Sarah - Soft Professional Voice</option>
+            <option value="AZnzlk1XvdvUeBnXmlld">Domi - Clear High Pitch</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="autoAudioToggle">
+            <input type="checkbox" id="autoAudioToggle" checked> Automatically play Sona voice messages (Auto Play)
+          </label>
+        </div>
+        
+        <div class="modal-footer">
+          <button id="saveVoiceSettingsBtn" class="btn btn-primary btn-block">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client JavaScript Modules -->
+  <script src="js/ffc-database.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

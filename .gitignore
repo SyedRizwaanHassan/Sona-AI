@@ -1,0 +1,5 @@
+node_modules
+uploads/*.webm
+uploads/*.mp3
+*.log
+.env
