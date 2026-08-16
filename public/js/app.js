@@ -1,5 +1,5 @@
 /**
- * Engro Agri AI Agent - Official Engro Fertilizers Limited
+ * Zarkhez AI Agent - Official Engro Fertilizers Limited
  * Client-Side Controller, Voice Assistant & Dosage Calculator
  */
 
@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentAudioPlayer = null;
   let activeSpeechRecognition = null;
 
-  let selectedVoiceId = localStorage.getItem('engro_voice_id') || 'cgSgspJ2msm6clMCkdW9';
-  let isAutoPlayAudio = localStorage.getItem('engro_auto_play') !== 'false';
+  let selectedVoiceId = localStorage.getItem('zarkhez_voice_id') || 'cgSgspJ2msm6clMCkdW9';
+  let isAutoPlayAudio = localStorage.getItem('zarkhez_auto_play') !== 'false';
 
   if (voiceSelect) voiceSelect.value = selectedVoiceId;
   if (autoAudioToggle) autoAudioToggle.checked = isAutoPlayAudio;
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initialPlayBtn.addEventListener('click', () => {
       const speechText = initialPlayBtn.getAttribute('data-speech-text');
       const botCard = initialPlayBtn.closest('.chat-message');
-      playEngroVoice(initialPlayBtn, speechText, botCard);
+      playZarkhezVoice(initialPlayBtn, speechText, botCard);
     });
   }
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomePlayBtn.addEventListener('click', () => {
           const speechText = welcomePlayBtn.getAttribute('data-speech-text');
           const botCard = welcomePlayBtn.closest('.chat-message');
-          playEngroVoice(welcomePlayBtn, speechText, botCard);
+          playZarkhezVoice(welcomePlayBtn, speechText, botCard);
         });
       }
 
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="message-content">
           <div class="message-header">
-            <span class="sender-name">Farmer</span>
+            <span class="sender-name">Kissan Bhai</span>
             <span class="timestamp">${getCurrentTime()}</span>
           </div>
           <div class="message-body nastaliq">${escapeHtml(text)}</div>
@@ -175,10 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="message-content">
           <div class="message-header">
-            <span class="sender-name">Engro Agri AI (Analyzing Crop Recommendations...)</span>
+            <span class="sender-name">Zarkhez AI (Analyzing Engro Recommendations...)</span>
           </div>
           <div class="message-body nastaliq text-green">
-            <i class="fa-solid fa-circle-notch fa-spin"></i> اینگرو کی زرعی معلومات اور صوتی رہنمائی تیار ہو رہی ہے...
+            <i class="fa-solid fa-circle-notch fa-spin"></i> اینگرو کی زرعی معلومات اور زرخیز کی آواز تیار ہو رہی ہے...
           </div>
         </div>
       </div>
@@ -199,17 +199,17 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="message-content">
           <div class="message-header">
-            <span class="sender-name">Engro Agri AI (Senior Agronomist)</span>
+            <span class="sender-name">Zarkhez (Senior Agronomist - Engro)</span>
             <span class="timestamp">${getCurrentTime()}</span>
           </div>
           <div class="message-body nastaliq">${formatMarkdownUrdu(text)}</div>
           
-          <!-- Engro Voice Player Card -->
+          <!-- Zarkhez Voice Player Card -->
           <div class="engro-voice-card">
             <div class="engro-voice-header">
               <div class="engro-badge">
                 <i class="fa-solid fa-volume-high text-orange"></i>
-                <span>Engro Voice Guide (Audio)</span>
+                <span>Zarkhez Voice Guide (Audio)</span>
               </div>
               <span class="engro-tag">Engro Official Audio</span>
             </div>
@@ -235,16 +235,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn = botCard.querySelector('.play-audio-btn');
 
     playBtn.addEventListener('click', () => {
-      playEngroVoice(playBtn, cleanSpeech, botCard);
+      playZarkhezVoice(playBtn, cleanSpeech, botCard);
     });
 
     if (isAutoPlayAudio && playBtn) {
-      playEngroVoice(playBtn, cleanSpeech, botCard);
+      playZarkhezVoice(playBtn, cleanSpeech, botCard);
     }
   }
 
   // Fast Low-Latency Audio Stream Playback
-  async function playEngroVoice(playBtn, speechText, botCard) {
+  async function playZarkhezVoice(playBtn, speechText, botCard) {
     const icon = playBtn.querySelector('i');
     const progressBar = botCard.querySelector('.audio-progress-fill');
     const timeDisplay = botCard.querySelector('.audio-time');
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
       icon.className = 'fa-solid fa-pause';
 
     } catch (err) {
-      console.error('Engro Audio Playback Error:', err);
+      console.error('Zarkhez Audio Playback Error:', err);
       icon.className = 'fa-solid fa-triangle-exclamation';
       timeDisplay.innerText = 'Audio error';
     }
@@ -467,11 +467,11 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedVoiceId = voiceSelect.value;
     isAutoPlayAudio = autoAudioToggle.checked;
 
-    localStorage.setItem('engro_voice_id', selectedVoiceId);
-    localStorage.setItem('engro_auto_play', isAutoPlayAudio);
+    localStorage.setItem('zarkhez_voice_id', selectedVoiceId);
+    localStorage.setItem('zarkhez_auto_play', isAutoPlayAudio);
 
     voiceModal.classList.add('hidden');
-    alert('Engro voice settings saved successfully!');
+    alert('Zarkhez voice settings saved successfully!');
   });
 
   function scrollToBottom() {

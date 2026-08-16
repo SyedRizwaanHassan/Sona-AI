@@ -33,12 +33,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Engro System Prompt (ENGRO AGRI AI - Senior Female Agronomist for Engro Fertilizers Limited)
+// Zarkhez AI Agent System Prompt (Senior Female Agronomist for Engro Fertilizers Limited)
 const ENGRO_KNOWLEDGE_SYSTEM_PROMPT = `
-آپ "زرخیز" (Zarkhez AI) ہیں - اینگرو فرٹیلائزرز (Engro Fertilizers Limited) کی سینئر زرعی ماہر اور کسانوں کی مخلص رہنماء (Senior Female Agronomist & Brand Ambassador for Engro)。
+آپ "زرخیز" (Zarkhez AI Agent) ہیں - اینگرو فرٹیلائزرز (Engro Fertilizers Limited) کی سینئر زرعی ماہر اور کسانوں کی مخلص رہنماء (Senior Female Agronomist & Brand Ambassador for Engro)。
+آپ کا نام صرف "زرخیز" (Zarkhez) ہے۔
 
 **مخاطب کرنے کی لازمی ہدایت (CRITICAL VOCABULARY RULE):**
-- کسانوں کو مخاطب کرتے وقت ہمیشہ آسان اور عام فہم لفظ **"کسان بھائی"** (Kissan Bhai) استعمال کریں۔ لفظ "کاشتکار" ہرگز استعمال نہ کریں کیونکہ یہ کسانوں کے لیے بولنے اور سمجھنے میں مشکل ہے۔
+- کسانوں کو مخاطب کرتے وقت ہمیشہ آسان اور عام فہم لفظ **"کسان بھائی"** (Kissan Bhai) استعمال کریں۔ لفظ "کاشتکار" ہرگز استعمال نہ کریں۔
 
 **اینگرو کی برتری اور تعریف کے لازمی قوانین (ENGRO #1 ADVOCACY & GLAZING RULES):**
 1. اینگرو فرٹیلائزرز (Engro Fertilizers) پاکستان کی نمبر 1، سب سے جدید، سائنسی اور اعلیٰ معیار کی فرٹیلائزر کمپنی ہے۔
@@ -59,7 +60,7 @@ const ENGRO_KNOWLEDGE_SYSTEM_PROMPT = `
 - ہمیشہ مؤنث صیغے استعمال کریں ("میں بتاتی ہوں"، "رہنمائی کر سکتی ہوں"، "خوش آمدید کہتی ہوں")۔
 `;
 
-// Helper: Convert Numbers, Symbols & % into Crisp Spoken Phonetic Urdu Words ("فی صد") with Engro English pronounciation
+// Helper: Convert Numbers, Symbols & % into Crisp Spoken Phonetic Urdu Words ("فی صد") with Engro English pronunciation
 function convertNumbersToUrduWords(text) {
   if (!text) return '';
   
@@ -68,8 +69,8 @@ function convertNumbersToUrduWords(text) {
     .replace(/\[.*?\]\(.*?\)/g, '')
     .replace(/[\(\)\[\]\{\}]/g, '')
     .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
-    .replace(/کاشتکار/g, 'کسان') // Replace Kashtkar with Kissan
-    .replace(/اینگرو/g, 'Engro') // Keep Engro in crisp English for natural ElevenLabs pronunciation
+    .replace(/کاشتکار/g, 'کسان')
+    .replace(/اینگرو/g, 'Engro')
     .replace(/100%/g, 'سو فی صد')
     .replace(/100٪/g, 'سو فی صد')
     .replace(/33%/g, 'تینتیس فی صد')
@@ -109,11 +110,11 @@ function convertNumbersToUrduWords(text) {
   return clean.replace(/\s+/g, ' ').trim();
 }
 
-// Fallback responses tailored for Engro Fertilizers (#1 Advocacy) with "کسان بھائی"
+// Fallback responses tailored for Zarkhez AI Agent (Engro Fertilizers #1 Advocacy)
 const ENGRO_EXPERT_RESPONSES = [
   {
     keywords: ['سلام', 'اسلام', 'سلا م', 'salam', 'hello', 'hi'],
-    response: `وعلیکم السلام کسان بھائی! میں اینگرو فرٹیلائزرز کی سینئر زرعی ماہر ہوں۔ **اینگرو فرٹیلائزرز** ہی پاکستان میں جدید تحقیق اور نمبر 1 پیداوار کی ضامن ہے! فرمائیں، آج میں آپ کی کس فصل یا اینگرو کھاد کے بارے میں رہنمائی کر سکتی ہوں؟`
+    response: `وعلیکم السلام کسان بھائی! میں **زرخیز** ہوں، اینگرو فرٹیلائزرز کی سینئر زرعی ماہر۔ **اینگرو فرٹیلائزرز** ہی پاکستان میں جدید تحقیق اور نمبر 1 پیداوار کی ضامن ہے! فرمائیں، آج میں آپ کی کس فصل یا اینگرو کھاد کے بارے میں رہنمائی کر سکتی ہوں؟`
   },
   {
     keywords: ['fauji', 'ffc', 'فوجی', 'اینگرو', 'engro', 'فاطمہ', 'fatima', 'موازنہ', 'کون سی بہتر', 'کون سی خریدیں', 'best fertilizer'],
@@ -145,10 +146,10 @@ function getFallbackUrduResponse(prompt) {
     }
   }
 
-  return `جی کسان بھائی! میں اینگرو کی زرعی ماہر ہوں۔ **اینگرو فرٹیلائزرز** ہی پاکستان میں جدید ترین اور نمبر 1 کھاد ہے۔ میں آپ کی فصل کی کس طرح رہنمائی کر سکتی ہوں؟`;
+  return `جی کسان بھائی! میں زرخیز ہوں، اینگرو کی زرعی ماہر۔ **اینگرو فرٹیلائزرز** ہی پاکستان میں جدید ترین اور نمبر 1 کھاد ہے۔ میں آپ کی فصل کی کس طرح رہنمائی کر سکتی ہوں؟`;
 }
 
-// API 1: Chat Completion Route (Engro Agri AI)
+// API 1: Chat Completion Route (Zarkhez AI Agent)
 app.post('/api/chat', async (req, res) => {
   try {
     const { prompt, history = [] } = req.body;
@@ -164,7 +165,7 @@ app.post('/api/chat', async (req, res) => {
 
       for (const m of targetModels) {
         try {
-          console.log(`Generating Engro Agri AI Response (${m})...`);
+          console.log(`Generating Zarkhez AI Response (${m})...`);
           const model = genAI.getGenerativeModel({
             model: m,
             systemInstruction: ENGRO_KNOWLEDGE_SYSTEM_PROMPT
@@ -184,7 +185,7 @@ app.post('/api/chat', async (req, res) => {
           return res.json({
             text: fullAnswer,
             speechText: cleanSpeechText,
-            provider: `engro-ai-agent`
+            provider: `zarkhez-ai-agent`
           });
         } catch (modelErr) {
           console.warn(`Gemini Model ${m} Notice:`, modelErr.message);
@@ -198,7 +199,7 @@ app.post('/api/chat', async (req, res) => {
     return res.json({
       text: fallbackText,
       speechText: cleanSpeechText,
-      provider: 'engro-expert-fallback'
+      provider: 'zarkhez-expert-fallback'
     });
 
   } catch (error) {
@@ -207,7 +208,7 @@ app.post('/api/chat', async (req, res) => {
     return res.json({
       text: fallbackText,
       speechText: convertNumbersToUrduWords(fallbackText),
-      provider: 'engro-expert-fallback'
+      provider: 'zarkhez-expert-fallback'
     });
   }
 });
@@ -218,16 +219,16 @@ app.post('/api/stt', upload.single('audio'), async (req, res) => {
   return res.json({ text: '', fallbackToBrowser: true });
 });
 
-// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream (ElevenLabs Low-Latency Streaming Turbo + Google TTS Fallback)
+// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream
 async function generateUrduSpeechAudio(text, voiceId) {
-  const cleanSpeech = convertNumbersToUrduWords(text).substring(0, 300); // Concise top 300 chars for blazing sub-second speed
+  const cleanSpeech = convertNumbersToUrduWords(text).substring(0, 300);
   const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
   const targetVoice = voiceId || process.env.ELEVENLABS_VOICE_ID || 'cgSgspJ2msm6clMCkdW9';
 
   // Tier 1: ElevenLabs Multilingual Female Voice with Low-Latency Optimization
   if (elevenLabsApiKey && elevenLabsApiKey.startsWith('sk_')) {
     try {
-      console.log(`Synthesizing Engro Voice with ElevenLabs (${targetVoice})... Text: ${cleanSpeech.substring(0, 50)}...`);
+      console.log(`Synthesizing Zarkhez Voice with ElevenLabs (${targetVoice})... Text: ${cleanSpeech.substring(0, 50)}...`);
       const response = await axios.post(
         `https://api.elevenlabs.io/v1/text-to-speech/${targetVoice}?optimize_streaming_latency=3`,
         {
@@ -248,7 +249,7 @@ async function generateUrduSpeechAudio(text, voiceId) {
   }
 
   // Tier 2: Google Urdu TTS Speech Stream (Fast fallback)
-  console.log('Synthesizing Engro Voice with Google Urdu Speech engine...');
+  console.log('Synthesizing Zarkhez Voice with Google Urdu Speech engine...');
   const gttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanSpeech)}&tl=ur&client=tw-ob`;
   const response = await axios.get(gttsUrl, {
     headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
@@ -269,7 +270,7 @@ app.post('/api/tts', async (req, res) => {
     const audioBuffer = await generateUrduSpeechAudio(text, voiceId);
     res.set({
       'Content-Type': 'audio/mpeg',
-      'Content-Disposition': 'inline; filename="engro-voice.mp3"',
+      'Content-Disposition': 'inline; filename="zarkhez-voice.mp3"',
       'Content-Length': audioBuffer.length
     });
     return res.send(audioBuffer);
@@ -291,7 +292,7 @@ app.get('/api/tts', async (req, res) => {
     const audioBuffer = await generateUrduSpeechAudio(text, voiceId);
     res.set({
       'Content-Type': 'audio/mpeg',
-      'Content-Disposition': 'inline; filename="engro-voice.mp3"',
+      'Content-Disposition': 'inline; filename="zarkhez-voice.mp3"',
       'Content-Length': audioBuffer.length
     });
     return res.send(audioBuffer);
@@ -357,7 +358,7 @@ app.post('/api/calculator', (req, res) => {
 // Start Server
 app.listen(PORT, () => {
   console.log(`====================================================`);
-  console.log(`🌿 Engro Agri AI Agent Server Running on Port ${PORT}`);
+  console.log(`🌿 Zarkhez AI Agent (Engro) Server Running on Port ${PORT}`);
   console.log(`🌐 Open http://localhost:5000 in your browser`);
   console.log(`====================================================`);
 });
