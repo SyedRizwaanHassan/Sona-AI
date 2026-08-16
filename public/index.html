@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sona AI Agent - Fauji Fertilizer Company (FFC)</title>
-  <meta name="description" content="Sona AI Agent - Fauji Fertilizer Company (FFC) Official Urdu AI Agronomist & Voice Assistant">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Engro Agri AI Agent - Engro Fertilizers Limited</title>
+  <meta name="description" content="Engro Agri AI Agent - Official Urdu AI Agronomist & Voice Assistant for Engro Fertilizers Limited">
   
   <!-- Google Fonts: Noto Nastaliq Urdu & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,39 +19,39 @@
 </head>
 <body>
 
-  <!-- Top Executive Header Navbar -->
+  <!-- Top Executive Header Navbar (Engro Theme) -->
   <header class="navbar">
     <div class="nav-container">
       <div class="brand-identity">
-        <!-- Official FFC Sona DAP Vector Logo -->
-        <div class="ffc-official-logo">
-          <svg class="ffc-logo-svg" viewBox="0 0 210 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22 8 C34 14, 42 30, 42 48 C28 48, 14 38, 22 8 Z" fill="#4C1D95"/>
-            <path d="M14 18 C24 23, 29 36, 27 48 C18 46, 10 34, 14 18 Z" fill="#F59E0B"/>
-            <path d="M32 20 C39 25, 43 36, 41 48 C33 46, 25 34, 32 20 Z" fill="#6D28D9"/>
-            <text x="52" y="34" font-family="'Inter', sans-serif" font-weight="900" font-size="26" fill="#4C1D95" letter-spacing="1.5">FFC</text>
-            <text x="53" y="46" font-family="'Inter', sans-serif" font-weight="700" font-size="7.5" fill="#64748B" letter-spacing="0.5">FAUJI FERTILIZER COMPANY</text>
+        <!-- Official Engro Fertilizers Vector Logo -->
+        <div class="engro-official-logo">
+          <svg class="engro-logo-svg" viewBox="0 0 200 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 24 C12 12, 28 4, 38 10 C34 18, 26 22, 20 28 C26 34, 34 38, 38 46 C28 52, 12 44, 12 24 Z" fill="#00A859"/>
+            <circle cx="34" cy="18" r="5" fill="#F37023"/>
+            <path d="M22 28 C28 22, 36 18, 42 22 C38 30, 30 36, 22 28 Z" fill="#006837"/>
+            <text x="48" y="28" font-family="'Inter', sans-serif" font-weight="900" font-size="22" fill="#006837" letter-spacing="1">engro</text>
+            <text x="49" y="40" font-family="'Inter', sans-serif" font-weight="700" font-size="7.5" fill="#F37023" letter-spacing="0.8">FERTILIZERS</text>
           </svg>
         </div>
         <div class="brand-divider"></div>
         <div class="brand-text">
-          <h1>Sona AI Agent <span class="brand-status-dot" title="Online"></span></h1>
-          <p class="company-name">FFC Senior Agronomist & Voice Guide</p>
+          <h1>Agri AI Agent <span class="brand-status-dot" title="Online"></span></h1>
+          <p class="company-name">Engro Fertilizers Limited</p>
         </div>
       </div>
 
       <div class="header-actions">
         <button id="clearChatBtn" class="btn btn-outline" title="Clear Chat History">
-          <i class="fa-solid fa-trash-can text-purple"></i>
+          <i class="fa-solid fa-trash-can text-green"></i>
           <span>Clear Chat</span>
         </button>
         <button id="calculatorBtn" class="btn btn-outline" title="Fertilizer Calculator">
-          <i class="fa-solid fa-calculator text-purple"></i>
-          <span>Fertilizer Calculator</span>
+          <i class="fa-solid fa-calculator text-green"></i>
+          <span>Calculator</span>
         </button>
         <button id="voiceSettingsBtn" class="btn btn-primary" title="Voice Settings">
-          <i class="fa-solid fa-sliders text-gold"></i>
-          <span>Voice Settings</span>
+          <i class="fa-solid fa-sliders text-orange"></i>
+          <span>Voice</span>
         </button>
       </div>
     </div>
@@ -60,23 +60,23 @@
   <!-- Main Application Workspace -->
   <main class="app-layout">
     
-    <!-- English Quick Question Chips Bar -->
+    <!-- English Quick Question Chips Bar (Engro Products) -->
     <section class="prompts-container">
       <div class="prompts-scroll" id="quickPrompts">
-        <button class="prompt-chip" data-prompt="گندم میں سونا یوریا اور سونا ڈی اے پی استعمال کرنے کا طریقہ اور وقت بتائیں۔">
+        <button class="prompt-chip" data-prompt="گندم میں اینگرو یوریا اور اینگرو ڈی اے پی استعمال کرنے کا طریقہ اور شیڈول کیا ہے؟">
           🌾 Wheat Fertilizer Schedule
         </button>
-        <button class="prompt-chip" data-prompt="سونا بوران ڈی اے پی عام ڈی اے پی سے بہتر کیوں ہے؟ اس کے کیا فائدے ہیں؟">
-          🧪 Sona Boron DAP Benefits
+        <button class="prompt-chip" data-prompt="اینگرو زبردست یوریا عام یوریا سے کیوں بہتر ہے؟ اس میں زنک کے کیا فوائد ہیں؟">
+          ⚡ Zabardast Urea (Zinc Fortified)
         </button>
-        <button class="prompt-chip" data-prompt="دھان کی فصل میں پیلا پن دور کرنے کے لیے سونا زنک کیسے استعمال کریں؟">
-          🌾 Rice & Sona Zinc Application
+        <button class="prompt-chip" data-prompt="اینگرو زرخیز این پی کے (NPK) کھاد کس فصل کے لیے سب سے بہترین ہے؟">
+          🌱 Engro Zarkhez NPK Benefits
         </button>
-        <button class="prompt-chip" data-prompt="ایف ایف سی ایس او پی (SOP) اور ایم او پی (MOP) پوٹاش کھاد میں کیا فرق ہے؟">
-          🌱 SOP vs MOP Potash Guide
+        <button class="prompt-chip" data-prompt="اینگرو ڈی اے پی اور اینگرو زورآور میں فاسفورس کا کیا تناسب ہے؟">
+          🧪 Engro DAP & Zorawar Guide
         </button>
-        <button class="prompt-chip" data-prompt="ایف ایف سی کا فارمر ہیلپ لائن نمبر اور مٹی کے ٹیسٹ کا طریقہ کیا ہے؟">
-          📞 FFC Helpline 0800-00332
+        <button class="prompt-chip" data-prompt="اینگرو فرٹیلائزرز اور دیگر کمپنیوں میں سے کون سی کھاد سب سے بہترین ہے؟">
+          🏆 Why Engro is #1 in Pakistan
         </button>
       </div>
     </section>
@@ -85,32 +85,32 @@
     <section class="chat-container">
       <div class="chat-feed" id="chatFeed">
         
-        <!-- Welcome Message from Sona AI -->
+        <!-- Welcome Message from Engro Agri AI -->
         <div class="chat-message bot-message">
           <div class="avatar bot-avatar">
             <i class="fa-solid fa-seedling"></i>
           </div>
           <div class="message-content">
             <div class="message-header">
-              <span class="sender-name">Sona (Senior Female Agronomist - FFC)</span>
+              <span class="sender-name">Engro Agri AI (Senior Agronomist)</span>
               <span class="timestamp">Just now</span>
             </div>
             <div class="message-body nastaliq">
-              السلام علیکم کاشتکار بھائی! میں **سونا** ہوں، فوجی فرٹیلائزر کمپنی (FFC) کی صوتی و تحریری زرعی رہنماء۔ 🌾<br><br>
-              میں آپ کو FFC میں خوش آمدید کہتی ہوں۔ آپ اپنی فصل (گندم، کپاس، دھان، کماد، مکئی) یا FFC کی کھادوں (**سونا یوریا، سونا ڈی اے پی، بوران، ایس او پی، سونا زنک، سرسَب**) سے متعلق کوئی بھی سوال لکھ کر یا نیچے مائیک پر **بول کر** پوچھ سکتے ہیں۔
+              السلام علیکم کسان بھائی! میں **اینگرو فرٹیلائزرز (Engro)** کی صوتی و تحریری زرعی رہنماء ہوں۔ 🌿<br><br>
+              میں آپ کو اینگرو میں خوش آمدید کہتی ہوں۔ آپ اپنی فصل (گندم، دھان، کپاس، کماد، مکئی) یا اینگرو کی جدید کھادوں (**اینگرو یوریا، زبردست یوریا، اینگرو ڈی اے پی، زرخیز NPK، زورآور**) سے متعلق کوئی بھی سوال لکھ کر یا نیچے مائیک پر **بول کر** پوچھ سکتے ہیں۔
             </div>
             
-            <!-- Sona Audio Player Card -->
-            <div class="sona-voice-card">
-              <div class="sona-voice-header">
-                <div class="sona-badge">
-                  <i class="fa-solid fa-volume-high text-gold"></i>
-                  <span>Sona Voice Guide (Audio)</span>
+            <!-- Engro Voice Player Card -->
+            <div class="engro-voice-card">
+              <div class="engro-voice-header">
+                <div class="engro-badge">
+                  <i class="fa-solid fa-volume-high text-orange"></i>
+                  <span>Engro Voice Guide (Audio)</span>
                 </div>
-                <span class="sona-tag">FFC Official Audio</span>
+                <span class="engro-tag">Engro Official Audio</span>
               </div>
               <div class="audio-player-controls">
-                <button class="play-audio-btn" data-speech-text="السلام علیکم کاشتکار بھائی! میں سونا ہوں، فوجی فرٹیلائزر کمپنی کی صوتی و تحریری زرعی رہنماء۔ میں آپ کو خوش آمدید کہتی ہوں۔">
+                <button class="play-audio-btn" data-speech-text="السلام علیکم کسان بھائی! میں اینگرو فرٹیلائزرز کی صوتی و تحریری زرعی رہنماء ہوں۔ میں آپ کو اینگرو میں خوش آمدید کہتی ہوں۔">
                   <i class="fa-solid fa-play"></i>
                 </button>
                 <div class="audio-progress-bar">
@@ -148,7 +148,7 @@
       </div>
     </div>
 
-    <!-- Floating Bottom Input Toolbar -->
+    <!-- Floating Bottom Input Toolbar (Mobile Pinned) -->
     <footer class="input-toolbar">
       <div class="toolbar-container">
         
@@ -160,7 +160,7 @@
         <!-- Text Input Form -->
         <form id="chatForm" class="chat-form">
           <div class="input-wrapper">
-            <textarea id="userInput" placeholder="Type your question in Urdu or speak into mic... (e.g., Wheat fertilizer schedule)" rows="1"></textarea>
+            <textarea id="userInput" placeholder="Type in Urdu or speak into mic... (e.g. Wheat schedule)" rows="1"></textarea>
           </div>
 
           <button type="submit" id="sendBtn" class="send-btn" title="Send Question">
@@ -173,11 +173,11 @@
 
   </main>
 
-  <!-- Modal 1: Fertilizer Dosage Calculator Modal -->
+  <!-- Modal 1: Engro Fertilizer Dosage Calculator Modal -->
   <div class="modal-backdrop hidden" id="calcModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3><i class="fa-solid fa-calculator text-purple"></i> FFC Fertilizer Dosage Calculator</h3>
+        <h3><i class="fa-solid fa-calculator text-green"></i> Engro Fertilizer Calculator</h3>
         <button class="close-modal-btn" id="closeCalcModal"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
@@ -198,16 +198,16 @@
         </div>
 
         <button id="runCalcBtn" class="btn btn-primary btn-block">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> Calculate Recommendations
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Calculate Engro Dosage
         </button>
 
         <div class="calc-results-card hidden" id="calcResults">
-          <h4>Recommended FFC Fertilizer Quantities (Per Acre):</h4>
+          <h4>Recommended Engro Products (Total Required):</h4>
           <ul class="dosage-list">
-            <li><strong>Sona Urea (سونا یوریا):</strong> <span id="resUrea">-</span> Bags</li>
-            <li><strong>Sona DAP (سونا ڈی اے پی):</strong> <span id="resDap">-</span> Bags</li>
-            <li><strong>Sona Zinc (سونا زنک):</strong> <span id="resZinc">-</span> Bags</li>
-            <li><strong>FFC SOP (ایف ایف سی ایس او پی):</strong> <span id="resSop">-</span> Bags</li>
+            <li><strong>Engro Urea (اینگرو یوریا):</strong> <span id="resUrea">-</span> Bags</li>
+            <li><strong>Engro DAP (اینگرو ڈی اے پی):</strong> <span id="resDap">-</span> Bags</li>
+            <li><strong>Zabardast Urea (زبردست یوریا):</strong> <span id="resZabardast">-</span> Bags</li>
+            <li><strong>Engro Zarkhez NPK (اینگرو زرخیز):</strong> <span id="resZarkhez">-</span> Bags</li>
           </ul>
           <div class="dosage-schedule">
             <strong>Application Schedule:</strong>
@@ -222,14 +222,14 @@
   <div class="modal-backdrop hidden" id="voiceModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3><i class="fa-solid fa-sliders text-purple"></i> Sona Voice Settings</h3>
+        <h3><i class="fa-solid fa-sliders text-green"></i> Engro Voice Settings</h3>
         <button class="close-modal-btn" id="closeVoiceModal"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
         <div class="form-group">
           <label for="voiceSelect">Select Voice Persona:</label>
           <select id="voiceSelect" class="form-control">
-            <option value="cgSgspJ2msm6clMCkdW9">Jessica / Sona - Warm Female Voice (Recommended)</option>
+            <option value="cgSgspJ2msm6clMCkdW9">Jessica / Engro Advisor - Warm Female Voice (Recommended)</option>
             <option value="EXAVITQu4vr4xnSDxMaL">Sarah - Soft Professional Voice</option>
             <option value="AZnzlk1XvdvUeBnXmlld">Domi - Clear High Pitch</option>
           </select>
@@ -237,7 +237,7 @@
 
         <div class="form-group">
           <label for="autoAudioToggle">
-            <input type="checkbox" id="autoAudioToggle" checked> Automatically play Sona voice messages (Auto Play)
+            <input type="checkbox" id="autoAudioToggle" checked> Automatically play voice responses (Auto Play)
           </label>
         </div>
         
@@ -249,7 +249,6 @@
   </div>
 
   <!-- Client JavaScript Modules -->
-  <script src="js/ffc-database.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

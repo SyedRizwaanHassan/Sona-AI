@@ -1,6 +1,6 @@
 /**
- * Sona AI Agent - Fauji Fertilizer Company (FFC)
- * Official Female Agronomist AI & Voice Assistant Logic
+ * Engro Agri AI Agent - Official Engro Fertilizers Limited
+ * Client-Side Controller, Voice Assistant & Dosage Calculator
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentAudioPlayer = null;
   let activeSpeechRecognition = null;
 
-  let selectedVoiceId = localStorage.getItem('sona_voice_id') || 'cgSgspJ2msm6clMCkdW9';
-  let isAutoPlayAudio = localStorage.getItem('sona_auto_play') !== 'false';
+  let selectedVoiceId = localStorage.getItem('engro_voice_id') || 'cgSgspJ2msm6clMCkdW9';
+  let isAutoPlayAudio = localStorage.getItem('engro_auto_play') !== 'false';
 
   if (voiceSelect) voiceSelect.value = selectedVoiceId;
   if (autoAudioToggle) autoAudioToggle.checked = isAutoPlayAudio;
@@ -51,30 +51,36 @@ document.addEventListener('DOMContentLoaded', () => {
   // Preserve Initial Welcome Card HTML for Resetting
   const initialWelcomeHtml = chatFeed.innerHTML;
 
+  // Bind initial welcome card play button
+  const initialPlayBtn = chatFeed.querySelector('.play-audio-btn');
+  if (initialPlayBtn) {
+    initialPlayBtn.addEventListener('click', () => {
+      const speechText = initialPlayBtn.getAttribute('data-speech-text');
+      const botCard = initialPlayBtn.closest('.chat-message');
+      playEngroVoice(initialPlayBtn, speechText, botCard);
+    });
+  }
+
   // Clear Chat Button Handler
   if (clearChatBtn) {
     clearChatBtn.addEventListener('click', () => {
-      // Stop any playing audio
       if (currentAudioPlayer && !currentAudioPlayer.paused) {
         currentAudioPlayer.pause();
         currentAudioPlayer = null;
       }
 
-      // Reset conversation history & chat feed
       conversationHistory = [];
       chatFeed.innerHTML = initialWelcomeHtml;
 
-      // Re-bind click event on initial welcome card play button
       const welcomePlayBtn = chatFeed.querySelector('.play-audio-btn');
       if (welcomePlayBtn) {
         welcomePlayBtn.addEventListener('click', () => {
           const speechText = welcomePlayBtn.getAttribute('data-speech-text');
           const botCard = welcomePlayBtn.closest('.chat-message');
-          playSonaVoice(welcomePlayBtn, speechText, botCard);
+          playEngroVoice(welcomePlayBtn, speechText, botCard);
         });
       }
 
-      // Clear input & scroll to top
       userInput.value = '';
       userInput.style.height = 'auto';
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -84,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Auto-resize textarea
   userInput.addEventListener('input', () => {
     userInput.style.height = 'auto';
-    userInput.style.height = (userInput.scrollHeight) + 'px';
+    userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
   });
 
   // Handle Enter key for quick submit
@@ -169,10 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="message-content">
           <div class="message-header">
-            <span class="sender-name">Sona AI Agent (Fetching FFC Recommendations...)</span>
+            <span class="sender-name">Engro Agri AI (Analyzing Crop Recommendations...)</span>
           </div>
-          <div class="message-body nastaliq text-purple">
-            <i class="fa-solid fa-circle-notch fa-spin"></i> Loading FFC recommendations & preparing voice message...
+          <div class="message-body nastaliq text-green">
+            <i class="fa-solid fa-circle-notch fa-spin"></i> اینگرو کی زرعی معلومات اور صوتی رہنمائی تیار ہو رہی ہے...
           </div>
         </div>
       </div>
@@ -193,19 +199,19 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="message-content">
           <div class="message-header">
-            <span class="sender-name">Sona (Senior Female Agronomist - FFC)</span>
+            <span class="sender-name">Engro Agri AI (Senior Agronomist)</span>
             <span class="timestamp">${getCurrentTime()}</span>
           </div>
           <div class="message-body nastaliq">${formatMarkdownUrdu(text)}</div>
           
-          <!-- Sona Audio Player Card -->
-          <div class="sona-voice-card">
-            <div class="sona-voice-header">
-              <div class="sona-badge">
-                <i class="fa-solid fa-volume-high text-gold"></i>
-                <span>Sona Voice Guide (Audio)</span>
+          <!-- Engro Voice Player Card -->
+          <div class="engro-voice-card">
+            <div class="engro-voice-header">
+              <div class="engro-badge">
+                <i class="fa-solid fa-volume-high text-orange"></i>
+                <span>Engro Voice Guide (Audio)</span>
               </div>
-              <span class="sona-tag">FFC Official Audio</span>
+              <span class="engro-tag">Engro Official Audio</span>
             </div>
             <div class="audio-player-controls">
               <button class="play-audio-btn" data-speech-text="${escapeHtml(cleanSpeech)}">
@@ -229,20 +235,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn = botCard.querySelector('.play-audio-btn');
 
     playBtn.addEventListener('click', () => {
-      playSonaVoice(playBtn, cleanSpeech, botCard);
+      playEngroVoice(playBtn, cleanSpeech, botCard);
     });
 
     if (isAutoPlayAudio && playBtn) {
-      playSonaVoice(playBtn, cleanSpeech, botCard);
+      playEngroVoice(playBtn, cleanSpeech, botCard);
     }
   }
 
-  // Play Sona Voice directly from MP3 audio stream
-  async function playSonaVoice(playBtn, speechText, botCard) {
+  // Fast Low-Latency Audio Stream Playback
+  async function playEngroVoice(playBtn, speechText, botCard) {
     const icon = playBtn.querySelector('i');
     const progressBar = botCard.querySelector('.audio-progress-fill');
     const timeDisplay = botCard.querySelector('.audio-time');
-    const cleanSpeech = cleanTextForSpeech(speechText);
+    const cleanSpeech = cleanTextForSpeech(speechText).substring(0, 300);
 
     if (playBtn.audioObj && !playBtn.audioObj.paused) {
       playBtn.audioObj.pause();
@@ -271,9 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ text: cleanSpeech, voiceId: selectedVoiceId })
       });
 
-      if (!response.ok) {
-        throw new Error('TTS server failed');
-      }
+      if (!response.ok) throw new Error('TTS failed');
 
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
@@ -304,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
       icon.className = 'fa-solid fa-pause';
 
     } catch (err) {
-      console.error('Sona Audio Playback Error:', err);
+      console.error('Engro Audio Playback Error:', err);
       icon.className = 'fa-solid fa-triangle-exclamation';
       timeDisplay.innerText = 'Audio error';
     }
@@ -401,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       for (let i = 0; i < bufferLength; i++) {
         const barHeight = (dataArray[i] / 255) * waveformCanvas.height;
-        canvasCtx.fillStyle = '#4C1D95';
+        canvasCtx.fillStyle = '#00A859';
         canvasCtx.fillRect(x, waveformCanvas.height - barHeight, barWidth, barHeight);
         x += barWidth + 2;
       }
@@ -444,10 +448,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await res.json();
 
-      document.getElementById('resUrea').innerText = data.sonaUrea;
-      document.getElementById('resDap').innerText = data.sonaDap;
-      document.getElementById('resZinc').innerText = data.sonaZinc;
-      document.getElementById('resSop').innerText = data.sop;
+      document.getElementById('resUrea').innerText = data.engroUrea;
+      document.getElementById('resDap').innerText = data.engroDap;
+      document.getElementById('resZabardast').innerText = data.engroZabardast;
+      document.getElementById('resZarkhez').innerText = data.engroZarkhez;
       document.getElementById('resSchedule').innerText = data.schedule;
 
       calcResults.classList.remove('hidden');
@@ -463,11 +467,11 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedVoiceId = voiceSelect.value;
     isAutoPlayAudio = autoAudioToggle.checked;
 
-    localStorage.setItem('sona_voice_id', selectedVoiceId);
-    localStorage.setItem('sona_auto_play', isAutoPlayAudio);
+    localStorage.setItem('engro_voice_id', selectedVoiceId);
+    localStorage.setItem('engro_auto_play', isAutoPlayAudio);
 
     voiceModal.classList.add('hidden');
-    alert('Voice settings saved successfully!');
+    alert('Engro voice settings saved successfully!');
   });
 
   function scrollToBottom() {

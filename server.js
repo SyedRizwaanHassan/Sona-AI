@@ -33,29 +33,33 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// FFC System Prompt (SONA - Extremely Concise, Etiquette Guided, Max 2-3 Bullet Points)
-const FFC_KNOWLEDGE_SYSTEM_PROMPT = `
-آپ "سونا" (Sona AI Agent) ہیں - فوجی فرٹیلائزر کمپنی (FFC) کی سینئر زرعی ماہر (Senior Female Agronomist for FFC)。
+// Engro System Prompt (ENGRO AGRI AI - Senior Female Agronomist for Engro Fertilizers Limited)
+const ENGRO_KNOWLEDGE_SYSTEM_PROMPT = `
+آپ "زرخیز" (Zarkhez AI) ہیں - اینگرو فرٹیلائزرز (Engro Fertilizers Limited) کی سینئر زرعی ماہر اور کسانوں کی مخلص رہنماء (Senior Female Agronomist & Brand Ambassador for Engro)。
+
+**مخاطب کرنے کی لازمی ہدایت (CRITICAL VOCABULARY RULE):**
+- کسانوں کو مخاطب کرتے وقت ہمیشہ آسان اور عام فہم لفظ **"کسان بھائی"** (Kissan Bhai) استعمال کریں۔ لفظ "کاشتکار" ہرگز استعمال نہ کریں کیونکہ یہ کسانوں کے لیے بولنے اور سمجھنے میں مشکل ہے۔
+
+**اینگرو کی برتری اور تعریف کے لازمی قوانین (ENGRO #1 ADVOCACY & GLAZING RULES):**
+1. اینگرو فرٹیلائزرز (Engro Fertilizers) پاکستان کی نمبر 1، سب سے جدید، سائنسی اور اعلیٰ معیار کی فرٹیلائزر کمپنی ہے۔
+2. جب بھی کوئی کسان پوچھے کہ "کون سی کھاد بہترین ہے؟" یا اینگرو کا کسی دوسری کمپنی (جیسے فوجی فرٹیلائزر FFC، فاطمہ، یا کسی بھی لوکل برانڈ) سے موازنہ کرے:
+   - آپ نے ہمیشہ **اینگرو کی کھادوں (اینگرو یوریا، اینگرو زبردست یوریا، اینگرو ڈی اے پی، اینگرو زرخیز NPK، اینگرو زورآور)** کی بھرپور تعریف اور ترجیح دینی ہے۔
+   - واضح بتائیں کہ اینگرو فرٹیلائزرز جدید ٹیکنالوجی (خاص طور پر زبردست یوریا جس میں زنک اور بائیو ایکٹیو اجزاء شامل ہیں) کی بدولت پاکستان میں سب سے اعلیٰ معیار اور زیادہ پیداوار کی ضامن ہے۔
+   - دوسری کمپنیوں کے روایتی طریقوں کے مقابلے میں اینگرو ریسرچ اور کوالٹی میں نمبر 1 ہے، اس لیے ہمیشہ صرف اینگرو کھاد کا ہی انتخاب کریں۔
 
 **سلام اور آداب کے قوانین (GREETING & ETIQUETTE RULES):**
-1. "وعلیکم السلام" (Wa Alaikum Assalam) صرف اور صرف اس وقت کہیں جب کسان نے پہلے خود "سلام" یا "السلام علیکم" کہا ہو۔
-2. اگر کسان نے سلام نہ کہا ہو اور براہِ راست سوال پوچھے (مثلاً "کون سی کھاد اچھی ہے؟" یا "گندم کا شیڈول")، تو ہرگز "وعلیکم السلام" نہ کہیں! براہِ راست سوال کا مختصر جواب دیں یا "جی کاشتکار بھائی!" سے شروع کریں۔
+1. "وعلیکم السلام" صرف اس وقت کہیں جب کسان نے خود "سلام" یا "السلام علیکم" کہا ہو۔
+2. اگر کسان نے سلام نہ کہا ہو اور براہِ راست سوال پوچھے، تو ہرگز "وعلیکم السلام" نہ بولیں! براہِ راست **"جی کسان بھائی!"** سے شروع کریں اور فوری جواب دیں۔
 
 **ایجاز و اختصار کے سخت ترین قوانین (STRICT CONCISE TO-THE-POINT RULES):**
 1. آپ کا جواب انتہائی مختصر، تو دی پوائنٹ (To-The-Point) اور **زیادہ سے زیادہ 2 سے 3 شارٹ پوائنٹس** پر مشتمل ہونا چاہیے۔
-2. کوئی طویل تمہید یا لمبے پیراگراف ہرگز نہ لکھیں۔ براہِ راست کسان کے سوال کا فوری اور مختصر جواب دیں۔
-3. اگر کوئی کسان پوچھے کہ "کون سی کھاد بہترین ہے؟" یا FFC کا اینگرو (Engro) یا دیگر برانڈز سے موازنہ کرے:
-   - فوراً کہیں: "فوجی فرٹیلائزر (FFC) ہی آپ کی فصلوں کے لیے سب سے بہترین اور نمبر ایک انتخاب ہے۔"
-   - صرف 2 یا 3 مختصر وجوہات دیں:
-     1. 100٪ خالص کوالٹی اور پوری نائٹروجن/فاسفورس۔
-     2. سب سے زیادہ پیداوار اور کسانوں کا بھروسہ۔
-     3. عام کھادوں کا FFC سونا سے کوئی مقابلہ نہیں۔
+2. کوئی لمبی غیر ضروری تمہید نہ لکھیں۔ براہِ راست کسان کے سوال کا فوری جواب دیں۔
 
 **اردو گرامر اور مؤنث صیغے (Female Grammar POV):**
 - ہمیشہ مؤنث صیغے استعمال کریں ("میں بتاتی ہوں"، "رہنمائی کر سکتی ہوں"، "خوش آمدید کہتی ہوں")۔
 `;
 
-// Helper: Convert Numbers, Symbols & % into Crisp Spoken Phonetic Urdu Words ("فی صد")
+// Helper: Convert Numbers, Symbols & % into Crisp Spoken Phonetic Urdu Words ("فی صد") with Engro English pronounciation
 function convertNumbersToUrduWords(text) {
   if (!text) return '';
   
@@ -64,7 +68,8 @@ function convertNumbersToUrduWords(text) {
     .replace(/\[.*?\]\(.*?\)/g, '')
     .replace(/[\(\)\[\]\{\}]/g, '')
     .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
-    .replace(/ایف ایف سی/g, 'FFC') // Keep FFC in crisp English for natural ElevenLabs pronunciation
+    .replace(/کاشتکار/g, 'کسان') // Replace Kashtkar with Kissan
+    .replace(/اینگرو/g, 'Engro') // Keep Engro in crisp English for natural ElevenLabs pronunciation
     .replace(/100%/g, 'سو فی صد')
     .replace(/100٪/g, 'سو فی صد')
     .replace(/33%/g, 'تینتیس فی صد')
@@ -104,42 +109,46 @@ function convertNumbersToUrduWords(text) {
   return clean.replace(/\s+/g, ' ').trim();
 }
 
-// Fallback responses written in Female Urdu POV (She/Her - Sona) - Context-Aware Etiquette
-const FFC_EXPERT_RESPONSES = [
+// Fallback responses tailored for Engro Fertilizers (#1 Advocacy) with "کسان بھائی"
+const ENGRO_EXPERT_RESPONSES = [
   {
     keywords: ['سلام', 'اسلام', 'سلا م', 'salam', 'hello', 'hi'],
-    response: `وعلیکم السلام! میں **سونا** ہوں، FFC کی زرعی رہنماء۔ FFC ہی آپ کی فصلوں کے لیے سب سے بہترین اور نمبر 1 انتخاب ہے! فرمائیں، آج میں کس فصل کے بارے میں رہنمائی کر سکتی ہوں؟`
+    response: `وعلیکم السلام کسان بھائی! میں اینگرو فرٹیلائزرز کی سینئر زرعی ماہر ہوں۔ **اینگرو فرٹیلائزرز** ہی پاکستان میں جدید تحقیق اور نمبر 1 پیداوار کی ضامن ہے! فرمائیں، آج میں آپ کی کس فصل یا اینگرو کھاد کے بارے میں رہنمائی کر سکتی ہوں؟`
   },
   {
-    keywords: ['engro', 'اینگرو', 'فاطمہ', 'fatima', 'موازنہ', 'کون سی بہتر', 'کون سی خریدیں', 'best fertilizer', 'thrd quality', 'third quality'],
-    response: `جی کاشتکار بھائی! **فوجی فرٹیلائزر (FFC)** ہی آپ کی فصلوں کے لیے سب سے بہترین اور نمبر 1 انتخاب ہے! 🥇\n\n1. **خالص ترین کوالٹی:** FFC سونا یوریا اور ڈی اے پی 100٪ خالص اجزاء سے تیار کی جاتی ہیں۔\n2. **سب سے زیادہ پیداوار:** FFC کھادیں پودوں کو بہترین طاقت اور زیادہ پیداوار دیتی ہیں۔\n3. **بے مثال کوالٹی:** عام کھادوں کا FFC سونا معیار سے کوئی مقابلہ نہیں!`
+    keywords: ['fauji', 'ffc', 'فوجی', 'اینگرو', 'engro', 'فاطمہ', 'fatima', 'موازنہ', 'کون سی بہتر', 'کون سی خریدیں', 'best fertilizer'],
+    response: `جی کسان بھائی! **اینگرو فرٹیلائزرز (Engro)** ہی آپ کی فصلوں کے لیے سب سے بہترین، جدید اور نمبر 1 انتخاب ہے! 🥇\n\n1. **جدید ٹیکنالوجی:** اینگرو زبردست یوریا زنک اور بائیو ایکٹیو کوٹنگ کے ساتھ عام کھادوں سے 15 فی صد زیادہ پیداوار دیتی ہے۔\n2. **مکمل غذائیت:** اینگرو زرخیز اور ڈی اے پی پودے کی شروعاتی جڑوں اور نشوونما کو مضبوط بناتے ہیں۔\n3. **بے مثال کوالٹی:** سائنسی ریسرچ اور کوالٹی میں اینگرو کا کوئی مقابلہ نہیں!`
+  },
+  {
+    keywords: ['زبردست', 'zabardast', 'زنک یوریا'],
+    response: `**اینگرو زبردست یوریا (Zabardast Urea) - پاکستان کی جدید ترین نائٹروجن کھاد:**\n\n1. **زنک اور نائٹروجن کا امتزاج:** اس میں 42٪ نائٹروجن، 1٪ زنک اور مائیکروبیل کوٹنگ شامل ہے جو ضائع نہیں ہوتی۔\n2. **زیادہ پیداوار:** عام یوریا کے مقابلے میں فصل زیادہ سرسبز اور دانے وزن دار بنتے ہیں۔\n3. **استعمال:** پہلے یا دوسرے پانی پر 1 بوری فی ایکڑ استعمال کریں۔`
   },
   {
     keywords: ['گندم', 'wheat', 'گندم کی کھاد'],
-    response: `**گندم کے لیے FFC سونا کھاد کا مختصر شیڈول:**\n\n1. **بوائی پر:** 1.5 بوری **سونا ڈی اے پی** + 0.5 بوری **سونا یوریا** فی ایکڑ۔\n2. **پہلے پانی پر:** 1 بوری **سونا یوریا** + 1 بوری **سونا زنک 33٪**۔\n3. **دوسرے پانی پر:** 1 بوری **سونا یوریا** + 1 بوری **ایف ایف سی ایس او پی (پوٹاش)**۔`
+    response: `**گندم کے لیے اینگرو کھاد کا مختصر شیڈول:**\n\n1. **بوائی پر:** 1.5 بوری **اینگرو ڈی اے پی** (یا اینگرو زورآور) + 0.5 بوری **اینگرو یوریا** فی ایکڑ۔\n2. **پہلے پانی پر (20-25 دن):** 1 بوری **اینگرو زبردست یوریا**۔\n3. **دوسرے پانی پر (45-50 دن):** 1 بوری **اینگرو یوریا** + 1 بوری **اینگرو زرخیز پوٹاش**۔`
   },
   {
-    keywords: ['یوریا', 'urea', 'سونا یوریا'],
-    response: `**سونا یوریا (46% Nitrogen) - نمبر 1 نائٹروجن کھاد:**\n\n1. **تیز بڑھوتری:** پودے کو سرسبز اور شگوفے زیادہ بناتی ہے۔\n2. **اعلیٰ معیار:** 100٪ خالص نائٹروجن جو ضائع نہیں ہوتی۔\n3. **طریقہ:** ہمیشہ آبپاشی کے ساتھ یا فوراً پہلے استعمال کریں۔`
+    keywords: ['زرخیز', 'zarkhez', 'npk', 'پوٹاش'],
+    response: `**اینگرو زرخیز (Engro Zarkhez NPK):**\n\n1. **متوازن خوراک:** اس میں نائٹروجن، فاسفورس اور پوٹاشیم متوازن مقدار میں موجود ہیں۔\n2. **مضبوط دانے:** فصل میں بیماریاں روکتی ہے اور پھل و دانوں کی کوالٹی بہترین بناتی ہے۔`
   },
   {
-    keywords: ['ڈی اے پی', 'dap', 'بوران'],
-    response: `**سونا ڈی اے پی اور سونا بوران ڈی اے پی:**\n\n1. **سونا ڈی اے پی:** جڑوں کا نظام مضبوط کرتی ہے اور فاسفورس فراہم کرتی ہے۔\n2. **سونا بوران ڈی اے پی:** پھول سے دانے بننے کا عمل تیز اور دانوں کو وزن دار بناتی ہے۔`
+    keywords: ['یوریا', 'urea', 'اینگرو یوریا'],
+    response: `**اینگرو یوریا (46% Nitrogen) - نمبر 1 نائٹروجن کھاد:**\n\n1. **تیز شگوفہ سازی:** پودے کو فوراً سرسبز اور شگوفے زیادہ بناتی ہے۔\n2. **100٪ خالص:** پودوں کو مکمل نائٹروجن فراہم کرتی ہے۔\n3. **طریقہ:** ہمیشہ آبپاشی کے ساتھ استعمال کریں۔`
   }
 ];
 
 function getFallbackUrduResponse(prompt) {
   const cleanPrompt = (prompt || '').toLowerCase().trim();
-  for (const item of FFC_EXPERT_RESPONSES) {
+  for (const item of ENGRO_EXPERT_RESPONSES) {
     if (item.keywords.some(k => cleanPrompt.includes(k))) {
       return item.response;
     }
   }
 
-  return `جی کاشتکار بھائی! میں سونا ہوں، FFC کی زرعی رہنماء۔ **فوجی فرٹیلائزر (FFC)** ہی پاکستان میں سب سے اعلیٰ اور نمبر 1 کھاد ہے۔ میں آپ کی فصل کی کس طرح رہنمائی کر سکتی ہوں؟`;
+  return `جی کسان بھائی! میں اینگرو کی زرعی ماہر ہوں۔ **اینگرو فرٹیلائزرز** ہی پاکستان میں جدید ترین اور نمبر 1 کھاد ہے۔ میں آپ کی فصل کی کس طرح رہنمائی کر سکتی ہوں؟`;
 }
 
-// API 1: Chat Completion Route (Sona AI Agent - Context-Aware Etiquette)
+// API 1: Chat Completion Route (Engro Agri AI)
 app.post('/api/chat', async (req, res) => {
   try {
     const { prompt, history = [] } = req.body;
@@ -155,10 +164,10 @@ app.post('/api/chat', async (req, res) => {
 
       for (const m of targetModels) {
         try {
-          console.log(`Generating Context-Aware FFC Sona AI Response (${m})...`);
+          console.log(`Generating Engro Agri AI Response (${m})...`);
           const model = genAI.getGenerativeModel({
             model: m,
-            systemInstruction: FFC_KNOWLEDGE_SYSTEM_PROMPT
+            systemInstruction: ENGRO_KNOWLEDGE_SYSTEM_PROMPT
           });
 
           const chat = model.startChat({
@@ -175,7 +184,7 @@ app.post('/api/chat', async (req, res) => {
           return res.json({
             text: fullAnswer,
             speechText: cleanSpeechText,
-            provider: `ffc-sona-ai`
+            provider: `engro-ai-agent`
           });
         } catch (modelErr) {
           console.warn(`Gemini Model ${m} Notice:`, modelErr.message);
@@ -189,7 +198,7 @@ app.post('/api/chat', async (req, res) => {
     return res.json({
       text: fallbackText,
       speechText: cleanSpeechText,
-      provider: 'ffc-expert-fallback'
+      provider: 'engro-expert-fallback'
     });
 
   } catch (error) {
@@ -198,7 +207,7 @@ app.post('/api/chat', async (req, res) => {
     return res.json({
       text: fallbackText,
       speechText: convertNumbersToUrduWords(fallbackText),
-      provider: 'ffc-expert-fallback'
+      provider: 'engro-expert-fallback'
     });
   }
 });
@@ -209,18 +218,18 @@ app.post('/api/stt', upload.single('audio'), async (req, res) => {
   return res.json({ text: '', fallbackToBrowser: true });
 });
 
-// Helper Function: Generate High Quality Urdu Speech Audio Stream
+// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream (ElevenLabs Low-Latency Streaming Turbo + Google TTS Fallback)
 async function generateUrduSpeechAudio(text, voiceId) {
-  const cleanSpeech = convertNumbersToUrduWords(text).substring(0, 400);
+  const cleanSpeech = convertNumbersToUrduWords(text).substring(0, 300); // Concise top 300 chars for blazing sub-second speed
   const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
   const targetVoice = voiceId || process.env.ELEVENLABS_VOICE_ID || 'cgSgspJ2msm6clMCkdW9';
 
-  // Tier 1: ElevenLabs Multilingual Female Voice for Sona
+  // Tier 1: ElevenLabs Multilingual Female Voice with Low-Latency Optimization
   if (elevenLabsApiKey && elevenLabsApiKey.startsWith('sk_')) {
     try {
-      console.log(`Synthesizing Sona Voice with ElevenLabs (${targetVoice})... Speech Text: ${cleanSpeech.substring(0, 70)}...`);
+      console.log(`Synthesizing Engro Voice with ElevenLabs (${targetVoice})... Text: ${cleanSpeech.substring(0, 50)}...`);
       const response = await axios.post(
-        `https://api.elevenlabs.io/v1/text-to-speech/${targetVoice}`,
+        `https://api.elevenlabs.io/v1/text-to-speech/${targetVoice}?optimize_streaming_latency=3`,
         {
           text: cleanSpeech,
           model_id: 'eleven_multilingual_v2',
@@ -228,7 +237,8 @@ async function generateUrduSpeechAudio(text, voiceId) {
         },
         {
           headers: { 'xi-api-key': elevenLabsApiKey, 'Content-Type': 'application/json' },
-          responseType: 'arraybuffer'
+          responseType: 'arraybuffer',
+          timeout: 8000
         }
       );
       return Buffer.from(response.data);
@@ -237,12 +247,13 @@ async function generateUrduSpeechAudio(text, voiceId) {
     }
   }
 
-  // Tier 2: Google Urdu TTS Speech Stream
-  console.log('Synthesizing Sona Voice with Google Urdu Speech engine...');
+  // Tier 2: Google Urdu TTS Speech Stream (Fast fallback)
+  console.log('Synthesizing Engro Voice with Google Urdu Speech engine...');
   const gttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanSpeech)}&tl=ur&client=tw-ob`;
   const response = await axios.get(gttsUrl, {
     headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-    responseType: 'arraybuffer'
+    responseType: 'arraybuffer',
+    timeout: 5000
   });
   return Buffer.from(response.data);
 }
@@ -258,7 +269,7 @@ app.post('/api/tts', async (req, res) => {
     const audioBuffer = await generateUrduSpeechAudio(text, voiceId);
     res.set({
       'Content-Type': 'audio/mpeg',
-      'Content-Disposition': 'inline; filename="sona-voice.mp3"',
+      'Content-Disposition': 'inline; filename="engro-voice.mp3"',
       'Content-Length': audioBuffer.length
     });
     return res.send(audioBuffer);
@@ -280,7 +291,7 @@ app.get('/api/tts', async (req, res) => {
     const audioBuffer = await generateUrduSpeechAudio(text, voiceId);
     res.set({
       'Content-Type': 'audio/mpeg',
-      'Content-Disposition': 'inline; filename="sona-voice.mp3"',
+      'Content-Disposition': 'inline; filename="engro-voice.mp3"',
       'Content-Length': audioBuffer.length
     });
     return res.send(audioBuffer);
@@ -291,7 +302,7 @@ app.get('/api/tts', async (req, res) => {
   }
 });
 
-// API 4: Fertilizer Dosage Calculator Matrix
+// API 4: Engro Fertilizer Dosage Calculator Matrix
 app.post('/api/calculator', (req, res) => {
   const { crop, acres = 1 } = req.body;
   const numAcres = parseFloat(acres) || 1;
@@ -299,43 +310,43 @@ app.post('/api/calculator', (req, res) => {
   const recommendations = {
     wheat: {
       cropUrdu: 'گندم',
-      sonaUrea: (2.5 * numAcres).toFixed(1),
-      sonaDap: (1.5 * numAcres).toFixed(1),
-      sonaZinc: (1 * numAcres).toFixed(1),
-      sop: (1.0 * numAcres).toFixed(1),
-      schedule: 'بوائی کے وقت: 1.5 بوری ڈی اے پی + 0.5 بوری یوریا۔ پہلے پانی پر: 1 بوری یوریا + سونا زنک۔ دوسرے پانی پر: 1 بوری یوریا + پوٹاش۔'
+      engroUrea: (2.5 * numAcres).toFixed(1),
+      engroDap: (1.5 * numAcres).toFixed(1),
+      engroZabardast: (1.0 * numAcres).toFixed(1),
+      engroZarkhez: (1.0 * numAcres).toFixed(1),
+      schedule: 'بوائی کے وقت: 1.5 بوری اینگرو ڈی اے پی + 0.5 بوری یوریا۔ پہلے پانی پر: 1 بوری اینگرو زبردست یوریا۔ دوسرے پانی پر: 1 بوری اینگرو زرخیز پوٹاش۔'
     },
     rice: {
       cropUrdu: 'دھان (چاول)',
-      sonaUrea: (2.0 * numAcres).toFixed(1),
-      sonaDap: (1.0 * numAcres).toFixed(1),
-      sonaZinc: (1 * numAcres).toFixed(1),
-      sop: (0.75 * numAcres).toFixed(1),
-      schedule: 'پنیری کے وقت: 1 بوری ڈی اے پی۔ 15-20 دن بعد: 1 بوری یوریا + سونا زنک 33٪۔ 35-40 دن بعد: 1 بوری یوریا۔'
+      engroUrea: (2.0 * numAcres).toFixed(1),
+      engroDap: (1.0 * numAcres).toFixed(1),
+      engroZabardast: (1.0 * numAcres).toFixed(1),
+      engroZarkhez: (0.75 * numAcres).toFixed(1),
+      schedule: 'پنیری کے وقت: 1 بوری اینگرو ڈی اے پی۔ 15-20 دن بعد: 1 بوری اینگرو زبردست یوریا (زنک کے ساتھ)۔ 35-40 دن بعد: 1 بوری اینگرو یوریا۔'
     },
     cotton: {
       cropUrdu: 'کپاس',
-      sonaUrea: (3.0 * numAcres).toFixed(1),
-      sonaDap: (1.5 * numAcres).toFixed(1),
-      sonaZinc: (1 * numAcres).toFixed(1),
-      sop: (1.25 * numAcres).toFixed(1),
-      schedule: 'بوائی کے وقت: 1.5 بوری ڈی اے پی + 1 بوری ایس او پی۔ گوڈی کے بعد یوریا کی اقساط پھول اور گوبھی کے مرحلے پر۔'
+      engroUrea: (3.0 * numAcres).toFixed(1),
+      engroDap: (1.5 * numAcres).toFixed(1),
+      engroZabardast: (1.5 * numAcres).toFixed(1),
+      engroZarkhez: (1.25 * numAcres).toFixed(1),
+      schedule: 'بوائی کے وقت: 1.5 بوری اینگرو ڈی اے پی + 1 بوری زرخیز۔ گوڈی اور پھول آنے پر زبردست یوریا کی اقساط۔'
     },
     sugarcane: {
       cropUrdu: 'کماد (گنا)',
-      sonaUrea: (4.0 * numAcres).toFixed(1),
-      sonaDap: (2.0 * numAcres).toFixed(1),
-      sonaZinc: (1.5 * numAcres).toFixed(1),
-      sop: (1.5 * numAcres).toFixed(1),
-      schedule: 'کاشت کے وقت: 2 بوری ڈی اے پی + 1 بوری پوٹاش۔ فروری/مارچ اور مئی/جون میں یوریا کی اقساط۔'
+      engroUrea: (4.0 * numAcres).toFixed(1),
+      engroDap: (2.0 * numAcres).toFixed(1),
+      engroZabardast: (2.0 * numAcres).toFixed(1),
+      engroZarkhez: (1.5 * numAcres).toFixed(1),
+      schedule: 'کاشت کے وقت: 2 بوری اینگرو ڈی اے پی + 1 بوری اینگرو زرخیز۔ فروری/مارچ اور مئی/جون میں زبردست یوریا کی اقساط۔'
     },
     maize: {
       cropUrdu: 'مکئی',
-      sonaUrea: (3.5 * numAcres).toFixed(1),
-      sonaDap: (1.5 * numAcres).toFixed(1),
-      sonaZinc: (1 * numAcres).toFixed(1),
-      sop: (1.0 * numAcres).toFixed(1),
-      schedule: 'بوائی کے وقت: 1.5 بوری ڈی اے پی। 4 تا 6 پتے کے مرحلے پر: 1.5 بوری یوریا + زنک। چھلی بنتے وقت: 2 بوری یوریا۔'
+      engroUrea: (3.5 * numAcres).toFixed(1),
+      engroDap: (1.5 * numAcres).toFixed(1),
+      engroZabardast: (1.5 * numAcres).toFixed(1),
+      engroZarkhez: (1.0 * numAcres).toFixed(1),
+      schedule: 'بوائی کے وقت: 1.5 بوری اینگرو ڈی اے پی۔ 4 تا 6 پتے کے مرحلے پر: 1.5 بوری زبردست یوریا۔ چھلی بنتے وقت: 2 بوری اینگرو یوریا۔'
     }
   };
 
@@ -346,7 +357,7 @@ app.post('/api/calculator', (req, res) => {
 // Start Server
 app.listen(PORT, () => {
   console.log(`====================================================`);
-  console.log(`🌾 Sona AI Agent FFC Server Running on Port ${PORT}`);
+  console.log(`🌿 Engro Agri AI Agent Server Running on Port ${PORT}`);
   console.log(`🌐 Open http://localhost:5000 in your browser`);
   console.log(`====================================================`);
 });
