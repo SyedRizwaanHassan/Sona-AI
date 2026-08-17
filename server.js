@@ -238,7 +238,7 @@ app.post('/api/stt', upload.single('audio'), async (req, res) => {
 
 // Helper Function: Low-Latency High Quality Urdu Speech Audio Stream
 async function generateUrduSpeechAudio(text, voiceId) {
-  const cleanSpeech = convertNumbersToUrduWords(text).substring(0, 300);
+  const cleanSpeech = convertNumbersToUrduWords(text);
   const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
   const targetVoice = voiceId || process.env.ELEVENLABS_VOICE_ID || 'cgSgspJ2msm6clMCkdW9';
 

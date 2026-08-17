@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const icon = playBtn.querySelector('i');
     const progressBar = botCard.querySelector('.audio-progress-fill');
     const timeDisplay = botCard.querySelector('.audio-time');
-    const cleanSpeech = cleanTextForSpeech(speechText).substring(0, 300);
+    const cleanSpeech = cleanTextForSpeech(speechText);
 
     if (playBtn.audioObj && !playBtn.audioObj.paused) {
       playBtn.audioObj.pause();
