@@ -168,44 +168,62 @@ function getFallbackUrduResponse(prompt) {
   return `**اینگرو فرٹیلائزرز (Engro)** ہی پاکستان میں سب سے جدید اور نمبر 1 کھاد ہے۔ میں آپ کی فصل کے بارے میں کس طرح رہنمائی کر سکتی ہوں؟`;
 }
 
-// API 1: Chat Completion Route (Direct, Smart & To-The-Point)
+// API 1: Chat Completion Route (Direct, Smart, Resilient & Zero Failure)
 app.post('/api/chat', async (req, res) => {
-  try {
-    const { prompt, history = [] } = req.body;
-    const geminiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  const { prompt, history = [] } = req.body;
+  
+  if (!prompt || typeof prompt !== 'string') {
+    return res.status(400).json({ error: 'Prompt is required' });
+  }
 
-    if (!prompt) {
-      return res.status(400).json({ error: 'Prompt is required' });
-    }
+  try {
+    const geminiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
     if (geminiKey) {
       const genAI = new GoogleGenerativeAI(geminiKey);
-      const targetModels = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash'];
+      const targetModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+
+      // Sanitize and cap history to last 4 messages for 100% stability
+      const sanitizedHistory = [];
+      if (Array.isArray(history) && history.length > 0) {
+        const recent = history.slice(-4);
+        for (const h of recent) {
+          if (h && h.content && typeof h.content === 'string') {
+            sanitizedHistory.push({
+              role: h.role === 'assistant' ? 'model' : 'user',
+              parts: [{ text: h.content.substring(0, 1000) }]
+            });
+          }
+        }
+      }
 
       for (const m of targetModels) {
         try {
-          console.log(`Generating Smart Zarkhez AI Response (${m})...`);
+          console.log(`Generating Zarkhez AI Response (${m})...`);
           const model = genAI.getGenerativeModel({
             model: m,
             systemInstruction: ENGRO_KNOWLEDGE_SYSTEM_PROMPT
           });
 
-          const chat = model.startChat({
-            history: history.map(h => ({
-              role: h.role === 'assistant' ? 'model' : 'user',
-              parts: [{ text: h.content }]
-            }))
-          });
+          let fullAnswer = '';
+          try {
+            const chat = model.startChat({ history: sanitizedHistory });
+            const result = await chat.sendMessage(prompt);
+            fullAnswer = result.response.text();
+          } catch (chatErr) {
+            // If chat history causes issue, generate standalone
+            const singleResult = await model.generateContent(`${ENGRO_KNOWLEDGE_SYSTEM_PROMPT}\n\nUser Question: ${prompt}`);
+            fullAnswer = singleResult.response.text();
+          }
 
-          const result = await chat.sendMessage(prompt);
-          const fullAnswer = result.response.text();
-          const cleanSpeechText = convertNumbersToUrduWords(fullAnswer);
-
-          return res.json({
-            text: fullAnswer,
-            speechText: cleanSpeechText,
-            provider: `zarkhez-ai-agent`
-          });
+          if (fullAnswer && fullAnswer.trim()) {
+            const cleanSpeechText = convertNumbersToUrduWords(fullAnswer);
+            return res.json({
+              text: fullAnswer,
+              speechText: cleanSpeechText,
+              provider: `zarkhez-ai-agent`
+            });
+          }
         } catch (modelErr) {
           console.warn(`Gemini Model ${m} Notice:`, modelErr.message);
         }
@@ -223,7 +241,7 @@ app.post('/api/chat', async (req, res) => {
 
   } catch (error) {
     console.error('Chat General Error:', error.message);
-    const fallbackText = getFallbackUrduResponse(req.body.prompt || '');
+    const fallbackText = getFallbackUrduResponse(prompt || '');
     return res.json({
       text: fallbackText,
       speechText: convertNumbersToUrduWords(fallbackText),
