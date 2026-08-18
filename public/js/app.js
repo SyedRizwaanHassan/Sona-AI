@@ -314,7 +314,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Speech-to-Text (STT) Voice Recording
+  // Speech-to-Text (STT) Voice Recording (Only submits when 'Submit Question' is clicked)
+  let isRecordingActive = false;
+  const liveSpeechPreview = document.getElementById('liveSpeechPreview');
+
   micRecordBtn.addEventListener('click', () => {
     startUrduVoiceRecognition();
   });
@@ -330,33 +333,43 @@ document.addEventListener('DOMContentLoaded', () => {
       const recognition = new SpeechRecognition();
       activeSpeechRecognition = recognition;
       recognition.lang = 'ur-PK';
+      recognition.continuous = true; // Stay alive continuously until user clicks submit/cancel
       recognition.interimResults = true;
       recognition.maxAlternatives = 1;
 
+      isRecordingActive = true;
+      if (liveSpeechPreview) liveSpeechPreview.innerText = 'بولیں... آپ کی آواز سنی جا رہی ہے';
       recordingOverlay.classList.remove('hidden');
 
       recognition.onresult = (event) => {
-        let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
-          }
+        let fullTranscript = '';
+        for (let i = 0; i < event.results.length; ++i) {
+          fullTranscript += event.results[i][0].transcript + ' ';
         }
 
-        if (finalTranscript.trim()) {
-          userInput.value = finalTranscript.trim();
+        const trimmed = fullTranscript.trim();
+        if (trimmed) {
+          userInput.value = trimmed;
+          if (liveSpeechPreview) liveSpeechPreview.innerText = trimmed;
         }
+      };
+
+      recognition.onerror = (event) => {
+        console.warn('Speech recognition notice:', event.error);
       };
 
       recognition.onend = () => {
-        recordingOverlay.classList.add('hidden');
-        const finalVal = userInput.value.trim();
-        if (finalVal) {
-          chatForm.dispatchEvent(new Event('submit'));
+        // If the browser stopped due to silence but the user hasn't clicked submit/cancel yet, restart smoothly
+        if (isRecordingActive) {
+          try { recognition.start(); } catch (e) {}
         }
       };
 
-      recognition.start();
+      try {
+        recognition.start();
+      } catch (err) {
+        console.warn('Recognition start notice:', err);
+      }
     } else {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => startMediaRecorderStream(stream))
@@ -367,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function startMediaRecorderStream(stream) {
     audioChunks = [];
     mediaRecorder = new MediaRecorder(stream);
+    isRecordingActive = true;
     recordingOverlay.classList.remove('hidden');
 
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -418,18 +432,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (audioContext) audioContext.close();
   }
 
+  // Cancel Button: Aborts and does NOT submit anything
   cancelRecordBtn.addEventListener('click', () => {
+    isRecordingActive = false;
     if (activeSpeechRecognition) {
       try { activeSpeechRecognition.abort(); } catch (e) {}
     }
+    userInput.value = '';
     recordingOverlay.classList.add('hidden');
   });
 
+  // Submit Button: Stops recognition and sends the message ONLY when clicked!
   stopRecordBtn.addEventListener('click', () => {
+    isRecordingActive = false;
     if (activeSpeechRecognition) {
       try { activeSpeechRecognition.stop(); } catch (e) {}
     }
     recordingOverlay.classList.add('hidden');
+    const finalVal = userInput.value.trim();
+    if (finalVal) {
+      chatForm.dispatchEvent(new Event('submit'));
+    }
   });
 
   // Modals & Calculator
