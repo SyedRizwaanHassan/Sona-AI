@@ -112,10 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Handle Chat Form Submit
-  chatForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const prompt = userInput.value.trim();
+  // Universal Chat Submit Handler
+  async function handleChatSubmit(prompt) {
     if (!prompt) return;
 
     userInput.value = '';
@@ -145,6 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       loadingCard.remove();
       appendBotMessage('معذرت! کنیکشن کا مسئلہ ہوا ہے۔ براہ کرم دوبارہ کوشش کریں۔');
+    }
+  }
+
+  // Handle Form Submit (Text typing)
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const prompt = userInput.value.trim();
+    if (prompt) {
+      handleChatSubmit(prompt);
     }
   });
 
@@ -342,15 +349,15 @@ document.addEventListener('DOMContentLoaded', () => {
       recordingOverlay.classList.remove('hidden');
 
       recognition.onresult = (event) => {
+        if (!isRecordingActive) return;
         let fullTranscript = '';
         for (let i = 0; i < event.results.length; ++i) {
           fullTranscript += event.results[i][0].transcript + ' ';
         }
 
         const trimmed = fullTranscript.trim();
-        if (trimmed) {
-          userInput.value = trimmed;
-          if (liveSpeechPreview) liveSpeechPreview.innerText = trimmed;
+        if (trimmed && liveSpeechPreview) {
+          liveSpeechPreview.innerText = trimmed;
         }
       };
 
@@ -359,7 +366,6 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       recognition.onend = () => {
-        // If the browser stopped due to silence but the user hasn't clicked submit/cancel yet, restart smoothly
         if (isRecordingActive) {
           try { recognition.start(); } catch (e) {}
         }
@@ -437,21 +443,35 @@ document.addEventListener('DOMContentLoaded', () => {
     isRecordingActive = false;
     if (activeSpeechRecognition) {
       try { activeSpeechRecognition.abort(); } catch (e) {}
+      activeSpeechRecognition = null;
     }
+    if (liveSpeechPreview) liveSpeechPreview.innerText = 'بولیں... آپ کی آواز سنی جا رہی ہے';
     userInput.value = '';
     recordingOverlay.classList.add('hidden');
   });
 
-  // Submit Button: Stops recognition and sends the message ONLY when clicked!
+  // Submit Button: Sends only the spoken voice and keeps textarea 100% clean!
   stopRecordBtn.addEventListener('click', () => {
     isRecordingActive = false;
     if (activeSpeechRecognition) {
-      try { activeSpeechRecognition.stop(); } catch (e) {}
+      try { activeSpeechRecognition.abort(); } catch (e) {}
+      activeSpeechRecognition = null;
     }
+    
+    // Extract spoken transcript
+    let spokenText = '';
+    if (liveSpeechPreview) {
+      spokenText = liveSpeechPreview.innerText.replace('بولیں... آپ کی آواز سنی جا رہی ہے', '').trim();
+      liveSpeechPreview.innerText = 'بولیں... آپ کی آواز سنی جا رہی ہے';
+    }
+    
+    const textToSend = spokenText || userInput.value.trim();
+    userInput.value = ''; // Guaranteed clean!
+    userInput.style.height = 'auto';
     recordingOverlay.classList.add('hidden');
-    const finalVal = userInput.value.trim();
-    if (finalVal) {
-      chatForm.dispatchEvent(new Event('submit'));
+
+    if (textToSend) {
+      handleChatSubmit(textToSend);
     }
   });
 
