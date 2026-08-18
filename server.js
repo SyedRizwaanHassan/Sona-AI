@@ -236,16 +236,24 @@ app.post('/api/stt', upload.single('audio'), async (req, res) => {
   return res.json({ text: '', fallbackToBrowser: true });
 });
 
-// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream
+// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream (Dual ElevenLabs Key Fallback + Google Urdu Engine)
 async function generateUrduSpeechAudio(text, voiceId) {
   const cleanSpeech = convertNumbersToUrduWords(text);
-  const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
   const targetVoice = voiceId || process.env.ELEVENLABS_VOICE_ID || 'cgSgspJ2msm6clMCkdW9';
 
-  // Tier 1: ElevenLabs Multilingual Female Voice with Low-Latency Optimization
-  if (elevenLabsApiKey && elevenLabsApiKey.startsWith('sk_')) {
+  // Multi-tier ElevenLabs candidate keys
+  const keysToTry = [
+    process.env.ELEVENLABS_API_KEY,
+    process.env.ELEVENLABS_FALLBACK_API_KEY,
+    'sk_d22b919b4d0bc11a714a158eaaf2b012286297b7f0f22fae',
+    'sk_2e6b6d1dfbbaab2c78113f5c93813e1bc19695eacf612055'
+  ].filter((k, idx, arr) => k && k.startsWith('sk_') && arr.indexOf(k) === idx);
+
+  // Tier 1 & 2: ElevenLabs Multi-Key Trial
+  for (let i = 0; i < keysToTry.length; i++) {
+    const apiKey = keysToTry[i];
     try {
-      console.log(`Synthesizing Zarkhez Voice with ElevenLabs (${targetVoice})... Text: ${cleanSpeech.substring(0, 50)}...`);
+      console.log(`Synthesizing Zarkhez Voice with ElevenLabs Key #${i + 1} (${targetVoice})... Text: ${cleanSpeech.substring(0, 50)}...`);
       const response = await axios.post(
         `https://api.elevenlabs.io/v1/text-to-speech/${targetVoice}?optimize_streaming_latency=3`,
         {
@@ -254,19 +262,19 @@ async function generateUrduSpeechAudio(text, voiceId) {
           voice_settings: { stability: 0.55, similarity_boost: 0.85 }
         },
         {
-          headers: { 'xi-api-key': elevenLabsApiKey, 'Content-Type': 'application/json' },
+          headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
           responseType: 'arraybuffer',
           timeout: 8000
         }
       );
       return Buffer.from(response.data);
     } catch (elevenErr) {
-      console.warn('ElevenLabs API Notice, switching to Google Urdu Speech engine:', elevenErr.response ? elevenErr.response.status : elevenErr.message);
+      console.warn(`ElevenLabs Key #${i + 1} notice (${elevenErr.response ? elevenErr.response.status : elevenErr.message}), trying next fallback...`);
     }
   }
 
-  // Tier 2: Google Urdu TTS Speech Stream (Fast fallback)
-  console.log('Synthesizing Zarkhez Voice with Google Urdu Speech engine...');
+  // Tier 3: Google Urdu TTS Speech Stream (Guaranteed Unlimited Fallback)
+  console.log('Synthesizing Zarkhez Voice with Google Urdu Speech engine fallback...');
   const gttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanSpeech)}&tl=ur&client=tw-ob`;
   const response = await axios.get(gttsUrl, {
     headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
