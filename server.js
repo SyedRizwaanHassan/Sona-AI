@@ -260,20 +260,24 @@ app.post('/api/stt', upload.single('audio'), async (req, res) => {
   return res.json({ text: '', fallbackToBrowser: true });
 });
 
-// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream (Dual ElevenLabs Key Fallback + Google Urdu Engine)
+// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream (Triple ElevenLabs Key Failover + Google Urdu Engine)
 async function generateUrduSpeechAudio(text, voiceId) {
   const cleanSpeech = convertNumbersToUrduWords(text);
   const targetVoice = voiceId || process.env.ELEVENLABS_VOICE_ID || 'cgSgspJ2msm6clMCkdW9';
 
-  // Multi-tier ElevenLabs candidate keys
-  const keysToTry = [
+  // Multi-tier ElevenLabs candidate keys (Primary -> Fallback 1 -> Fallback 2)
+  const candidateKeys = [
     process.env.ELEVENLABS_API_KEY,
     process.env.ELEVENLABS_FALLBACK_API_KEY,
+    process.env.ELEVENLABS_FALLBACK_API_KEY_2,
     'sk_d22b919b4d0bc11a714a158eaaf2b012286297b7f0f22fae',
-    'sk_2e6b6d1dfbbaab2c78113f5c93813e1bc19695eacf612055'
-  ].filter((k, idx, arr) => k && k.startsWith('sk_') && arr.indexOf(k) === idx);
+    'sk_2e6b6d1dfbbaab2c78113f5c93813e1bc19695eacf612055',
+    'sk_214378f79d181c82d558268bf58c3dcaae98ce0d24562165'
+  ];
 
-  // Tier 1 & 2: ElevenLabs Multi-Key Trial
+  const keysToTry = candidateKeys.filter((k, idx, arr) => k && k.startsWith('sk_') && arr.indexOf(k) === idx);
+
+  // Seamless failover loop across all 3 ElevenLabs API Keys
   for (let i = 0; i < keysToTry.length; i++) {
     const apiKey = keysToTry[i];
     try {
@@ -293,11 +297,12 @@ async function generateUrduSpeechAudio(text, voiceId) {
       );
       return Buffer.from(response.data);
     } catch (elevenErr) {
-      console.warn(`ElevenLabs Key #${i + 1} notice (${elevenErr.response ? elevenErr.response.status : elevenErr.message}), trying next fallback...`);
+      const status = elevenErr.response ? elevenErr.response.status : elevenErr.message;
+      console.warn(`ElevenLabs Key #${i + 1} quota/status notice (${status}), instantly failing over to next key...`);
     }
   }
 
-  // Tier 3: Google Urdu TTS Speech Stream (Guaranteed Unlimited Fallback)
+  // Tier 4: Google Urdu TTS Speech Stream (Guaranteed Unlimited Safety Net)
   console.log('Synthesizing Zarkhez Voice with Google Urdu Speech engine fallback...');
   const gttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanSpeech)}&tl=ur&client=tw-ob`;
   const response = await axios.get(gttsUrl, {
