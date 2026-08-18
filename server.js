@@ -67,8 +67,8 @@ function convertNumbersToUrduWords(text) {
     .replace(/گندم/g, 'گندُم')          // Fixes "Gamdam" -> Natural Urdu "Gandum"
     .replace(/زرخیز/g, 'زر خیز')        // Fixes "Zarkhez" robotic drag -> Smooth human "Zar-khez"
     .replace(/شکریہ/g, 'شکریا')         // Fixes "Shukria" stiff ligature -> Natural human "Shukriya"
-    .replace(/السلام علیکم/g, 'السلام و علیکم') // Smooth melodic greeting flow
-    .replace(/وعلیکم السلام/g, 'وعلیکم و السلام') // Smooth melodic greeting flow
+    .replace(/وعلیکم و السلام/g, 'وعلیکم السلام') // Crisp Walaikum Assalam
+    .replace(/السلام و علیکم/g, 'السلام علیکم') // Crisp Assalam-o-Alaikum
     .replace(/کاشتکار/g, 'کسان')        // Simpler, colloquial friendly word
     .replace(/زنک/g, 'زِنک')           // Crisp "Zinc" pronunciation
     .replace(/بائیو ایکٹیو/g, 'Bioactive') // Crisp English for technical compound
