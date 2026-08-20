@@ -187,7 +187,6 @@ app.post('/api/chat', async (req, res) => {
 
     if (geminiKey) {
       const genAI = new GoogleGenerativeAI(geminiKey);
-      const targetModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
 
       // Sanitize and cap history to last 4 messages for 100% stability
       const sanitizedHistory = [];
@@ -203,36 +202,33 @@ app.post('/api/chat', async (req, res) => {
         }
       }
 
-      for (const m of targetModels) {
+      try {
+        console.log(`Generating Zarkhez AI Response (gemini-2.5-flash)...`);
+        const model = genAI.getGenerativeModel({
+          model: 'gemini-2.5-flash',
+          systemInstruction: ENGRO_KNOWLEDGE_SYSTEM_PROMPT
+        });
+
+        let fullAnswer = '';
         try {
-          console.log(`Generating Zarkhez AI Response (${m})...`);
-          const model = genAI.getGenerativeModel({
-            model: m,
-            systemInstruction: ENGRO_KNOWLEDGE_SYSTEM_PROMPT
-          });
-
-          let fullAnswer = '';
-          try {
-            const chat = model.startChat({ history: sanitizedHistory });
-            const result = await chat.sendMessage(prompt);
-            fullAnswer = result.response.text();
-          } catch (chatErr) {
-            // If chat history causes issue, generate standalone
-            const singleResult = await model.generateContent(`${ENGRO_KNOWLEDGE_SYSTEM_PROMPT}\n\nUser Question: ${prompt}`);
-            fullAnswer = singleResult.response.text();
-          }
-
-          if (fullAnswer && fullAnswer.trim()) {
-            const cleanSpeechText = convertNumbersToUrduWords(fullAnswer);
-            return res.json({
-              text: fullAnswer,
-              speechText: cleanSpeechText,
-              provider: `zarkhez-ai-agent`
-            });
-          }
-        } catch (modelErr) {
-          console.warn(`Gemini Model ${m} Notice:`, modelErr.message);
+          const chat = model.startChat({ history: sanitizedHistory });
+          const result = await chat.sendMessage(prompt);
+          fullAnswer = result.response.text();
+        } catch (chatErr) {
+          const singleResult = await model.generateContent(`${ENGRO_KNOWLEDGE_SYSTEM_PROMPT}\n\nUser Question: ${prompt}`);
+          fullAnswer = singleResult.response.text();
         }
+
+        if (fullAnswer && fullAnswer.trim()) {
+          const cleanSpeechText = convertNumbersToUrduWords(fullAnswer);
+          return res.json({
+            text: fullAnswer,
+            speechText: cleanSpeechText,
+            provider: `zarkhez-ai-agent`
+          });
+        }
+      } catch (geminiErr) {
+        console.warn('Gemini 2.5 Notice:', geminiErr.message);
       }
     }
 
@@ -262,7 +258,7 @@ app.post('/api/stt', upload.single('audio'), async (req, res) => {
   return res.json({ text: '', fallbackToBrowser: true });
 });
 
-// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream (Triple ElevenLabs Key Failover + Google Urdu Engine)
+// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream (Triple ElevenLabs Key Failover + Safe Google Urdu Engine)
 async function generateUrduSpeechAudio(text, voiceId) {
   const cleanSpeech = convertNumbersToUrduWords(text);
   const targetVoice = voiceId || process.env.ELEVENLABS_VOICE_ID || 'cgSgspJ2msm6clMCkdW9';
@@ -279,11 +275,11 @@ async function generateUrduSpeechAudio(text, voiceId) {
 
   const keysToTry = candidateKeys.filter((k, idx, arr) => k && k.startsWith('sk_') && arr.indexOf(k) === idx);
 
-  // Seamless failover loop across all 3 ElevenLabs API Keys
+  // Seamless failover loop across all 3 ElevenLabs API Keys (12s timeout for reliability)
   for (let i = 0; i < keysToTry.length; i++) {
     const apiKey = keysToTry[i];
     try {
-      console.log(`Synthesizing Zarkhez Voice with ElevenLabs Key #${i + 1} (${targetVoice})... Text: ${cleanSpeech.substring(0, 50)}...`);
+      console.log(`Synthesizing Zarkhez Voice with ElevenLabs Key #${i + 1} (${targetVoice})...`);
       const response = await axios.post(
         `https://api.elevenlabs.io/v1/text-to-speech/${targetVoice}?optimize_streaming_latency=3`,
         {
@@ -294,23 +290,24 @@ async function generateUrduSpeechAudio(text, voiceId) {
         {
           headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
           responseType: 'arraybuffer',
-          timeout: 8000
+          timeout: 12000
         }
       );
       return Buffer.from(response.data);
     } catch (elevenErr) {
       const status = elevenErr.response ? elevenErr.response.status : elevenErr.message;
-      console.warn(`ElevenLabs Key #${i + 1} quota/status notice (${status}), instantly failing over to next key...`);
+      console.warn(`ElevenLabs Key #${i + 1} notice (${status}), instantly trying next failover...`);
     }
   }
 
-  // Tier 4: Google Urdu TTS Speech Stream (Guaranteed Unlimited Safety Net)
+  // Tier 4: Google Urdu TTS Speech Stream (Guaranteed Safe Query Length <= 180 chars)
   console.log('Synthesizing Zarkhez Voice with Google Urdu Speech engine fallback...');
-  const gttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanSpeech)}&tl=ur&client=tw-ob`;
+  const safeGoogleUrduText = cleanSpeech.substring(0, 180);
+  const gttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(safeGoogleUrduText)}&tl=ur&client=tw-ob`;
   const response = await axios.get(gttsUrl, {
     headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
     responseType: 'arraybuffer',
-    timeout: 5000
+    timeout: 6000
   });
   return Buffer.from(response.data);
 }
