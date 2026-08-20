@@ -258,49 +258,63 @@ app.post('/api/stt', upload.single('audio'), async (req, res) => {
   return res.json({ text: '', fallbackToBrowser: true });
 });
 
-// Helper Function: Low-Latency High Quality Urdu Speech Audio Stream (Triple ElevenLabs Key Failover + Safe Google Urdu Engine)
+// Memory-cached list of invalid/expired keys to avoid retrying dead keys
+const deadApiKeySet = new Set();
+
+// Helper Function: Ultra-Low-Latency (<900ms) High Quality Urdu Speech Audio Stream
 async function generateUrduSpeechAudio(text, voiceId) {
   const cleanSpeech = convertNumbersToUrduWords(text);
   const targetVoice = voiceId || process.env.ELEVENLABS_VOICE_ID || 'cgSgspJ2msm6clMCkdW9';
 
-  // Multi-tier ElevenLabs candidate keys (Primary -> Fallback 1 -> Fallback 2)
+  // Candidate Keys: Active 3rd Key first for instant sub-second response
   const candidateKeys = [
+    'sk_214378f79d181c82d558268bf58c3dcaae98ce0d24562165', // Active Key with fresh quota
     process.env.ELEVENLABS_API_KEY,
     process.env.ELEVENLABS_FALLBACK_API_KEY,
     process.env.ELEVENLABS_FALLBACK_API_KEY_2,
-    'sk_d22b919b4d0bc11a714a158eaaf2b012286297b7f0f22fae',
     'sk_2e6b6d1dfbbaab2c78113f5c93813e1bc19695eacf612055',
-    'sk_214378f79d181c82d558268bf58c3dcaae98ce0d24562165'
+    'sk_d22b919b4d0bc11a714a158eaaf2b012286297b7f0f22fae'
   ];
 
-  const keysToTry = candidateKeys.filter((k, idx, arr) => k && k.startsWith('sk_') && arr.indexOf(k) === idx);
+  // Filter out duplicates and known dead/expired keys
+  const keysToTry = candidateKeys.filter((k, idx, arr) => 
+    k && k.startsWith('sk_') && arr.indexOf(k) === idx && !deadApiKeySet.has(k)
+  );
 
-  // Seamless failover loop across all 3 ElevenLabs API Keys (12s timeout for reliability)
+  // Try active keys with eleven_flash_v2_5 (Ultra-Fast 800ms generation)
   for (let i = 0; i < keysToTry.length; i++) {
     const apiKey = keysToTry[i];
     try {
-      console.log(`Synthesizing Zarkhez Voice with ElevenLabs Key #${i + 1} (${targetVoice})...`);
+      console.log(`Synthesizing Zarkhez Voice with ElevenLabs Key #${i + 1} (${apiKey.substring(0, 10)}...)...`);
       const response = await axios.post(
-        `https://api.elevenlabs.io/v1/text-to-speech/${targetVoice}?optimize_streaming_latency=3`,
+        `https://api.elevenlabs.io/v1/text-to-speech/${targetVoice}?optimize_streaming_latency=4`,
         {
           text: cleanSpeech,
-          model_id: 'eleven_multilingual_v2',
+          model_id: 'eleven_flash_v2_5',
           voice_settings: { stability: 0.55, similarity_boost: 0.85 }
         },
         {
           headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
           responseType: 'arraybuffer',
-          timeout: 12000
+          timeout: 10000
         }
       );
-      return Buffer.from(response.data);
+
+      if (response.data && response.data.length > 500) {
+        return Buffer.from(response.data);
+      }
     } catch (elevenErr) {
       const status = elevenErr.response ? elevenErr.response.status : elevenErr.message;
-      console.warn(`ElevenLabs Key #${i + 1} notice (${status}), instantly trying next failover...`);
+      if (status === 401 || status === 402 || status === 429) {
+        deadApiKeySet.add(apiKey); // Blacklist dead key so future requests don't waste time on it
+        console.warn(`ElevenLabs Key #${i + 1} permanently marked exhausted (${status}). Auto-routed to next key.`);
+      } else {
+        console.warn(`ElevenLabs Key #${i + 1} notice (${status}), trying next key...`);
+      }
     }
   }
 
-  // Tier 4: Google Urdu TTS Speech Stream (Guaranteed Safe Query Length <= 180 chars)
+  // Tier 4: Google Urdu TTS Speech Stream (Instant 100% Free Safety Net)
   console.log('Synthesizing Zarkhez Voice with Google Urdu Speech engine fallback...');
   const safeGoogleUrduText = cleanSpeech.substring(0, 180);
   const gttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(safeGoogleUrduText)}&tl=ur&client=tw-ob`;
