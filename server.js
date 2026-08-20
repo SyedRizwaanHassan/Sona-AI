@@ -266,14 +266,11 @@ async function generateUrduSpeechAudio(text, voiceId) {
   const cleanSpeech = convertNumbersToUrduWords(text);
   const targetVoice = voiceId || process.env.ELEVENLABS_VOICE_ID || 'cgSgspJ2msm6clMCkdW9';
 
-  // Candidate Keys: Active 3rd Key first for instant sub-second response
+  // Candidate Keys: Clean, active primary key only
   const candidateKeys = [
-    'sk_214378f79d181c82d558268bf58c3dcaae98ce0d24562165', // Active Key with fresh quota
     process.env.ELEVENLABS_API_KEY,
     process.env.ELEVENLABS_FALLBACK_API_KEY,
-    process.env.ELEVENLABS_FALLBACK_API_KEY_2,
-    'sk_2e6b6d1dfbbaab2c78113f5c93813e1bc19695eacf612055',
-    'sk_d22b919b4d0bc11a714a158eaaf2b012286297b7f0f22fae'
+    'sk_214378f79d181c82d558268bf58c3dcaae98ce0d24562165'
   ];
 
   // Filter out duplicates and known dead/expired keys
