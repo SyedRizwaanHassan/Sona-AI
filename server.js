@@ -419,10 +419,15 @@ app.post('/api/calculator', (req, res) => {
   return res.json({ success: true, acres: numAcres, ...selected });
 });
 
-// Start Server
-app.listen(PORT, () => {
+// Health Check endpoint for Render Load Balancers
+app.get('/healthz', (req, res) => {
+  res.status(200).send('Zarkhez AI is Healthy');
+});
+
+// Start Server (Bind to 0.0.0.0 for Docker & Render reverse-proxy compatibility)
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`====================================================`);
   console.log(`🌿 Zarkhez AI Agent (Engro) Server Running on Port ${PORT}`);
-  console.log(`🌐 Open http://localhost:5000 in your browser`);
+  console.log(`🌐 Open http://localhost:${PORT} in your browser`);
   console.log(`====================================================`);
 });
